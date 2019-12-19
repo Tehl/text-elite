@@ -1,4 +1,5 @@
 const readline = require("readline");
+const c_string = require("./c_string");
 const _printf = require("./printf");
 
 function printf() {
@@ -43,7 +44,7 @@ function plansys() {
   this.productivity = 0; // uint /* Two byte */
   this.radius = 0; // uint /* Two byte (not used by game at all) */W
   this.goatsoupseed = new fastseedtype(); // fastseedtype
-  this.name = allocArray(12, ""); // char[]
+  this.name = new c_string(12); // char[]
 }
 
 const galsize = 256;
@@ -57,7 +58,7 @@ const numforRied = 46;
 
 const galaxy = allocArray(galsize, null);
 const seed = new seedtype();
-const rnd_seed = new fastseedtype();
+let rnd_seed = new fastseedtype();
 
 function tradegood(baseprice, gradient, basequant, maskbyte, units, name) {
   /* In 6502 version these were: */
@@ -239,7 +240,18 @@ function tweakseed(s) {
 /**-String functions for text interface **/
 
 /* Remove all c's from string s */
-function stripout(s, c) {}
+function stripout(s, c) {
+  let i = 0;
+  let j = 0;
+  while (i < s.strlen()) {
+    if (s.getChar(i) != c) {
+      s.setChar(j, s.getChar(i));
+      j++;
+    }
+    i++;
+  }
+  s.set(j, 0);
+}
 
 function toupper(c) {
   if (!c) {
@@ -434,19 +446,19 @@ function makesystem(s) {
   tweakseed(s);
   /* Always four iterations of random number */
 
-  thissys.name[0] = pairs[pair1];
-  thissys.name[1] = pairs[pair1 + 1];
-  thissys.name[2] = pairs[pair2];
-  thissys.name[3] = pairs[pair2 + 1];
-  thissys.name[4] = pairs[pair3];
-  thissys.name[5] = pairs[pair3 + 1];
+  thissys.name.setChar(0, pairs[pair1]);
+  thissys.name.setChar(1, pairs[pair1 + 1]);
+  thissys.name.setChar(2, pairs[pair2]);
+  thissys.name.setChar(3, pairs[pair2 + 1]);
+  thissys.name.setChar(4, pairs[pair3]);
+  thissys.name.setChar(5, pairs[pair3 + 1]);
 
   if (longnameflag) {
     /* bit 6 of ORIGINAL w0 flags a four-pair name */
-    thissys.name[6] = pairs[pair4];
-    thissys.name[7] = pairs[pair4 + 1];
-    thissys.name[8] = 0;
-  } else thissys.name[6] = 0;
+    thissys.name.setChar(6, pairs[pair4]);
+    thissys.name.setChar(7, pairs[pair4 + 1]);
+    thissys.name.set(8, 0);
+  } else thissys.name.set(6, 0);
   stripout(thissys.name, ".");
 
   return thissys;
@@ -528,13 +540,13 @@ function matchsys(s) {
 /**-Print data for given system **/
 function prisys(plsy, compressed) {
   if (compressed) {
-    printf("%10s", plsy.name);
+    printf("%10s", plsy.name.toString());
     printf(" TL: %2i ", plsy.techlev + 1);
     printf("%12s", econnames[plsy.economy]);
     printf(" %15s", govnames[plsy.govtype]);
   } else {
     printf("\n\nSystem:  ");
-    printf(plsy.name);
+    printf(plsy.name.toString());
     printf("\nPosition (%i,", plsy.x);
     printf("%i)", plsy.y);
     printf("\nEconomy: (%i) ", plsy.economy);
@@ -548,7 +560,8 @@ function prisys(plsy, compressed) {
 
     rnd_seed = plsy.goatsoupseed;
     printf("\n");
-    goat_soup("\x8F is \x97.", plsy);
+    goat_soup(c_string.from("\x8F is \x97."), plsy);
+    printf("\n");
   }
 }
 
@@ -854,17 +867,19 @@ function gen_rnd_number() {
 }
 
 function goat_soup(source, psy) {
-  for (;;) {
-    let c = source++; // *(source++)
-    if (c == "\0") break;
+  for (let source_i = 0; source_i < source.strlen(); source_i++) {
+    let c = source.get(source_i);
+    if (c === 0) break;
     if (c < 0x80) printf("%c", c);
     else {
       if (c <= 0xa4) {
         let rnd = gen_rnd_number();
         goat_soup(
-          desc_list[c - 0x81].option[
-            (rnd >= 0x33) + (rnd >= 0x66) + (rnd >= 0x99) + (rnd >= 0xcc)
-          ],
+          c_string.from(
+            desc_list[c - 0x81].option[
+              (rnd >= 0x33) + (rnd >= 0x66) + (rnd >= 0x99) + (rnd >= 0xcc)
+            ]
+          ),
           psy
         );
       } else
@@ -872,20 +887,21 @@ function goat_soup(source, psy) {
           case 0xb0 /* planet name */:
             {
               let i = 1;
-              printf("%c", psy.name[0]);
-              while (psy.name[i] != "\0") printf("%c", tolower(psy.name[i++]));
+              printf("%c", psy.name.get(0));
+              while (psy.name.get(i) != 0)
+                printf("%c", tolower(psy.name.getChar(i++)));
             }
             break;
           case 0xb1 /* <planet name>ian */:
             {
               let i = 1;
-              printf("%c", psy.name[0]);
-              while (psy.name[i] != "\0") {
+              printf("%c", psy.name.get(0));
+              while (psy.name.get(i) != 0) {
                 if (
-                  psy.name[i + 1] != "\0" ||
-                  (psy.name[i] != "E" && psy.name[i] != "I")
+                  psy.name.get(i + 1) != 0 ||
+                  (psy.name.getChar(i) != "E" && psy.name.getChar(i) != "I")
                 )
-                  printf("%c", tolower(psy.name[i]));
+                  printf("%c", tolower(psy.name.getChar(i)));
                 i++;
               }
               printf("ian");
