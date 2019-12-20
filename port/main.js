@@ -2,8 +2,21 @@ const readline = require("readline");
 const c_string = require("./c_string");
 const _printf = require("./printf");
 
+const charMap = {
+  a: "a".charCodeAt(0),
+  z: "z".charCodeAt(0),
+  A: "A".charCodeAt(0),
+  Z: "Z".charCodeAt(0)
+};
+
 function printf() {
-  process.stdout.write(_printf.apply(_printf, arguments));
+  const args = Array.prototype.map.call(arguments, x => {
+    if (x instanceof c_string) {
+      return x.toString();
+    }
+    return x;
+  });
+  process.stdout.write(_printf.apply(_printf, args));
 }
 
 function allocArray(length, value) {
@@ -67,7 +80,7 @@ function tradegood(baseprice, gradient, basequant, maskbyte, units, name) {
   this.basequant = basequant; // uint /* one byte */
   this.maskbyte = maskbyte; // uint /* two bits */
   this.units = units; // uint /* longest="Radioactives" */
-  this.name = name; // char[20]
+  this.name = c_string.from(name); // char[20]
 }
 
 function markettype() {
@@ -92,14 +105,16 @@ const base1 = 0x0248; // uint16
 const base2 = 0xb753; // uint16 /* Base seed for galaxy 1 */
 
 // 1.5 planet names fix
-const pairs0 =
-  "ABOUSEITILETSTONLONUTHNOALLEXEGEZACEBISOUSESARMAINDIREA.ERATENBERALAVETIEDORQUANTEISRION";
+const pairs0 = c_string.from(
+  "ABOUSEITILETSTONLONUTHNOALLEXEGEZACEBISOUSESARMAINDIREA.ERATENBERALAVETIEDORQUANTEISRION"
+);
 
-const pairs =
+const pairs = c_string.from(
   "..LEXEGEZACEBISO" +
-  "USESARMAINDIREA." +
-  "ERATENBERALAVETI" +
-  "EDORQUANTEISRION"; /* Dots should be nullprint characters */
+    "USESARMAINDIREA." +
+    "ERATENBERALAVETI" +
+    "EDORQUANTEISRION"
+); /* Dots should be nullprint characters */
 
 const govnames = [
   "Anarchy",
@@ -168,7 +183,7 @@ const commands = [
   "galhyp",
   "quit",
   "rand"
-];
+].map(c_string.from);
 
 const comfuncs = [
   dobuy,
@@ -231,7 +246,7 @@ function ftoi2(value) {
 }
 
 function tweakseed(s) {
-  let temp = s.w0 + s.w1 + s.w2; /* 2 byte aritmetic */
+  const temp = s.w0 + s.w1 + s.w2; /* 2 byte aritmetic */
   s.w0 = s.w1;
   s.w1 = s.w2;
   s.w2 = temp;
@@ -254,43 +269,25 @@ function stripout(s, c) {
 }
 
 function toupper(c) {
-  if (!c) {
-    return c;
+  if (c >= charMap.a && c <= charMap.z) {
+    return c + charMap.A - charMap.a;
   }
-
-  const a = "a".charCodeAt(0);
-  const z = "z".charCodeAt(0);
-  const A = "A".charCodeAt(0);
-
-  c = c.charCodeAt(0);
-  if (c >= a && c <= z) {
-    return String.fromCharCode(c + A - a);
-  }
-  return String.fromCharCode(c);
+  return c;
 }
 
 function tolower(c) {
-  if (!c) {
-    return c;
+  if (c >= charMap.A && c <= charMap.Z) {
+    return c + charMap.a - charMap.A;
   }
-
-  const A = "A".charCodeAt(0);
-  const Z = "Z".charCodeAt(0);
-  const a = "a".charCodeAt(0);
-
-  c = c.charCodeAt(0);
-  if (c >= A && c <= Z) {
-    return String.fromCharCode(c + a - A);
-  }
-  return String.fromCharCode(c);
+  return c;
 }
 
 /* Return nonzero iff string t begins with non-empty string s */
 function stringbeg(s, t) {
   let i = 0;
-  let l = s.length;
+  const l = s.strlen();
   if (l > 0) {
-    while ((i < l) & (toupper(s[i]) == toupper(t[i]))) i++;
+    while ((i < l) & (toupper(s.get(i)) == toupper(t.get(i)))) i++;
     if (i == l) return true;
   }
   return false;
@@ -308,12 +305,22 @@ function stringmatch(s, a, n) {
 }
 
 /* Split string s at first space, returning first 'word' in t & shortening s */
-function spacesplit(s) {
-  const idx = s.trim().indexOf(" ");
-  if (idx === -1) {
-    return { s: "", t: s };
+function spacesplit(s, t) {
+  let i = 0;
+  let j = 0;
+  const l = s.strlen();
+  while ((i < l) & (s.getChar(i) == " ")) i++; /* Strip leading spaces */
+  if (i == l) {
+    s.set(0, 0);
+    t.set(0, 0);
+    return;
   }
-  return { s: s.substring(idx).trim(), t: s.substring(0, idx).trim() };
+  while ((i < l) & (s.getChar(i) != " ")) t.set(j++, s.get(i++));
+  t.set(j, 0);
+  i++;
+  j = 0;
+  while (i < l) s.set(j++, s.get(i++));
+  s.set(j, 0);
 }
 
 /**-Functions for stock market **/
@@ -341,7 +348,7 @@ function gamebuy(i, a) {
 
 /* As gamebuy but selling */
 function gamesell(i, a) {
-  let t = mymin(shipshold[i], a);
+  const t = mymin(shipshold[i], a);
   shipshold[i] -= t;
   localmarket.quantity[i] += t;
   if (commodities[i].units == tonnes) {
@@ -366,7 +373,7 @@ function gamesell(i, a) {
    The player's cash is held in four bytes. 
  */
 function genmarket(fluct, p) {
-  let market = new markettype();
+  const market = new markettype();
   let i;
   for (i = 0; i <= lasttrade; i++) {
     let q;
@@ -446,17 +453,17 @@ function makesystem(s) {
   tweakseed(s);
   /* Always four iterations of random number */
 
-  thissys.name.setChar(0, pairs[pair1]);
-  thissys.name.setChar(1, pairs[pair1 + 1]);
-  thissys.name.setChar(2, pairs[pair2]);
-  thissys.name.setChar(3, pairs[pair2 + 1]);
-  thissys.name.setChar(4, pairs[pair3]);
-  thissys.name.setChar(5, pairs[pair3 + 1]);
+  thissys.name.set(0, pairs.get(pair1));
+  thissys.name.set(1, pairs.get(pair1 + 1));
+  thissys.name.set(2, pairs.get(pair2));
+  thissys.name.set(3, pairs.get(pair2 + 1));
+  thissys.name.set(4, pairs.get(pair3));
+  thissys.name.set(5, pairs.get(pair3 + 1));
 
   if (longnameflag) {
     /* bit 6 of ORIGINAL w0 flags a four-pair name */
-    thissys.name.setChar(6, pairs[pair4]);
-    thissys.name.setChar(7, pairs[pair4 + 1]);
+    thissys.name.set(6, pairs.get(pair4));
+    thissys.name.set(7, pairs.get(pair4 + 1));
     thissys.name.set(8, 0);
   } else thissys.name.set(6, 0);
   stripout(thissys.name, ".");
@@ -470,7 +477,7 @@ function makesystem(s) {
 
 /* rotate 8 bit number leftwards */
 function rotatel(x) {
-  let temp = x & 128;
+  const temp = x & 128;
   return 2 * (x & 127) + (temp >> 7);
 }
 
@@ -540,13 +547,13 @@ function matchsys(s) {
 /**-Print data for given system **/
 function prisys(plsy, compressed) {
   if (compressed) {
-    printf("%10s", plsy.name.toString());
+    printf("%10s", plsy.name);
     printf(" TL: %2i ", plsy.techlev + 1);
     printf("%12s", econnames[plsy.economy]);
     printf(" %15s", govnames[plsy.govtype]);
   } else {
     printf("\n\nSystem:  ");
-    printf(plsy.name.toString());
+    printf(plsy.name);
     printf("\nPosition (%i,", plsy.x);
     printf("%i)", plsy.y);
     printf("\nEconomy: (%i) ", plsy.economy);
@@ -561,7 +568,6 @@ function prisys(plsy, compressed) {
     rnd_seed = plsy.goatsoupseed;
     printf("\n");
     goat_soup(c_string.from("\x8F is \x97."), plsy);
-    printf("\n");
   }
 }
 
@@ -590,7 +596,7 @@ function dolocal(s) {
 /* Jump to planet name s */
 function dojump(s) {
   let d;
-  let dest = matchsys(s);
+  const dest = matchsys(s);
   if (dest == currentplanet) {
     printf("\nBad jump");
     return false;
@@ -633,13 +639,13 @@ function dogalhyp(s) {
 
 /* Info on planet */
 function doinfo(s) {
-  let dest = matchsys(s);
+  const dest = matchsys(s);
   prisys(galaxy[dest], false);
   return true;
 }
 
 function dohold(s) {
-  let a = parseInt(s, 10);
+  const a = parseInt(s, 10);
   let t = 0;
   let i;
   for (i = 0; i <= lasttrade; ++i) {
@@ -655,12 +661,61 @@ function dohold(s) {
 
 /* Sell ammount S(2) of good S(1) */
 function dosell(s) {
-  console.log(">> sell " + s);
+  let i;
+  let a;
+  let t;
+  const s2 = new c_string(maxlen);
+  spacesplit(s, s2);
+  a = parseInt(s, 10);
+  if (a == 0) {
+    a = 1;
+  }
+  i = stringmatch(s2, tradnames, lasttrade + 1);
+  if (i == 0) {
+    printf("\nUnknown trade good");
+    return false;
+  }
+  i -= 1;
+
+  t = gamesell(i, a);
+
+  if (t == 0) {
+    printf("Cannot sell any ");
+  } else {
+    printf("\nSelling %i", t);
+    printf(unitnames[commodities[i].units]);
+    printf(" of ");
+  }
+  printf(tradnames[i]);
+
+  return true;
 }
 
 /* Buy ammount S(2) of good S(1) */
 function dobuy(s) {
-  console.log(">> buy " + s);
+  let i;
+  let a;
+  let t;
+  const s2 = new c_string(maxlen);
+  spacesplit(s, s2);
+  a = parseInt(s, 10);
+  if (a == 0) a = 1;
+  i = stringmatch(s2, tradnames, lasttrade + 1);
+  if (i == 0) {
+    printf("\nUnknown trade good");
+    return false;
+  }
+  i -= 1;
+
+  t = gamebuy(i, a);
+  if (t == 0) printf("Cannot buy any ");
+  else {
+    printf("\nBuying %i", t);
+    printf(unitnames[commodities[i].units]);
+    printf(" of ");
+  }
+  printf(tradnames[i]);
+  return true;
 }
 
 function gamefuel(f) {
@@ -710,11 +765,13 @@ function domkt(s) {
 }
 
 function parser(s) {
-  const res = spacesplit(s);
-  const c = res.t;
-  s = res.s;
+  s = c_string.from(s);
 
-  let i = stringmatch(c, commands, nocomms);
+  let i;
+  const c = new c_string(maxlen);
+  spacesplit(s, c);
+
+  i = stringmatch(c, commands, nocomms);
   if (i) {
     return comfuncs[i - 1](s);
   }
@@ -772,7 +829,8 @@ function main() {
     const rl = readline.createInterface(process.stdin, process.stdout);
 
     const prompt = () => {
-      rl.setPrompt(_printf("\n\nCash :%.1f>", cash / 10));
+      printf("\n\n");
+      rl.setPrompt(_printf("Cash :%.1f>", cash / 10));
       rl.prompt();
     };
 
@@ -799,49 +857,49 @@ function main() {
 /* "Goat Soup" planetary description string code - adapted from Christian Pinder's
   reverse engineered sources. */
 
-function desc_choice(option) {
-  this.option = option; // char[][5]
+function desc_choice() {
+  this.option = Array.prototype.map.call(arguments, c_string.from); // char[][5]
 }
 
 // prettier-ignore
 const desc_list =
 [
-  /* 81 */	new desc_choice(["fabled", "notable", "well known", "famous", "noted"]),
-  /* 82 */	new desc_choice(["very", "mildly", "most", "reasonably", ""]),
-  /* 83 */	new desc_choice(["ancient", "\x95", "great", "vast", "pink"]),
-  /* 84 */	new desc_choice(["\x9E \x9D plantations", "mountains", "\x9C", "\x94 forests", "oceans"]),
-  /* 85 */	new desc_choice(["shyness", "silliness", "mating traditions", "loathing of \x86", "love for \x86"]),
-  /* 86 */	new desc_choice(["food blenders", "tourists", "poetry", "discos", "\x8E"]),
-  /* 87 */	new desc_choice(["talking tree", "crab", "bat", "lobst", "\xB2"]),
-  /* 88 */	new desc_choice(["beset", "plagued", "ravaged", "cursed", "scourged"]),
-  /* 89 */	new desc_choice(["\x96 civil war", "\x9B \x98 \x99s", "a \x9B disease", "\x96 earthquakes", "\x96 solar activity"]),
-  /* 8A */	new desc_choice(["its \x83 \x84", "the \xB1 \x98 \x99","its inhabitants' \x9A \x85", "\xA1", "its \x8D \x8E"]),
-  /* 8B */	new desc_choice(["juice", "brandy", "water", "brew", "gargle blasters"]),
-  /* 8C */	new desc_choice(["\xB2", "\xB1 \x99", "\xB1 \xB2", "\xB1 \x9B", "\x9B \xB2"]),
-  /* 8D */	new desc_choice(["fabulous", "exotic", "hoopy", "unusual", "exciting"]),
-  /* 8E */	new desc_choice(["cuisine", "night life", "casinos", "sit coms", " \xA1 "]),
-  /* 8F */	new desc_choice(["\xB0", "The planet \xB0", "The world \xB0", "This planet", "This world"]),
-  /* 90 */	new desc_choice(["n unremarkable", " boring", " dull", " tedious", " revolting"]),
-  /* 91 */	new desc_choice(["planet", "world", "place", "little planet", "dump"]),
-  /* 92 */	new desc_choice(["wasp", "moth", "grub", "ant", "\xB2"]),
-  /* 93 */	new desc_choice(["poet", "arts graduate", "yak", "snail", "slug"]),
-  /* 94 */	new desc_choice(["tropical", "dense", "rain", "impenetrable", "exuberant"]),
-  /* 95 */	new desc_choice(["funny", "wierd", "unusual", "strange", "peculiar"]),
-  /* 96 */	new desc_choice(["frequent", "occasional", "unpredictable", "dreadful", "deadly"]),
-  /* 97 */	new desc_choice(["\x82 \x81 for \x8A", "\x82 \x81 for \x8A and \x8A", "\x88 by \x89", "\x82 \x81 for \x8A but \x88 by \x89","a\x90 \x91"]),
-  /* 98 */	new desc_choice(["\x9B", "mountain", "edible", "tree", "spotted"]),
-  /* 99 */	new desc_choice(["\x9F", "\xA0", "\x87oid", "\x93", "\x92"]),
-  /* 9A */	new desc_choice(["ancient", "exceptional", "eccentric", "ingrained", "\x95"]),
-  /* 9B */	new desc_choice(["killer", "deadly", "evil", "lethal", "vicious"]),
-  /* 9C */	new desc_choice(["parking meters", "dust clouds", "ice bergs", "rock formations", "volcanoes"]),
-  /* 9D */	new desc_choice(["plant", "tulip", "banana", "corn", "\xB2weed"]),
-  /* 9E */	new desc_choice(["\xB2", "\xB1 \xB2", "\xB1 \x9B", "inhabitant", "\xB1 \xB2"]),
-  /* 9F */	new desc_choice(["shrew", "beast", "bison", "snake", "wolf"]),
-  /* A0 */	new desc_choice(["leopard", "cat", "monkey", "goat", "fish"]),
-  /* A1 */	new desc_choice(["\x8C \x8B", "\xB1 \x9F \xA2","its \x8D \xA0 \xA2", "\xA3 \xA4", "\x8C \x8B"]),
-  /* A2 */	new desc_choice(["meat", "cutlet", "steak", "burgers", "soup"]),
-  /* A3 */	new desc_choice(["ice", "mud", "Zero-G", "vacuum", "\xB1 ultra"]),
-  /* A4 */	new desc_choice(["hockey", "cricket", "karate", "polo", "tennis"])
+  /* 81 */	new desc_choice("fabled", "notable", "well known", "famous", "noted"),
+  /* 82 */	new desc_choice("very", "mildly", "most", "reasonably", ""),
+  /* 83 */	new desc_choice("ancient", "\x95", "great", "vast", "pink"),
+  /* 84 */	new desc_choice("\x9E \x9D plantations", "mountains", "\x9C", "\x94 forests", "oceans"),
+  /* 85 */	new desc_choice("shyness", "silliness", "mating traditions", "loathing of \x86", "love for \x86"),
+  /* 86 */	new desc_choice("food blenders", "tourists", "poetry", "discos", "\x8E"),
+  /* 87 */	new desc_choice("talking tree", "crab", "bat", "lobst", "\xB2"),
+  /* 88 */	new desc_choice("beset", "plagued", "ravaged", "cursed", "scourged"),
+  /* 89 */	new desc_choice("\x96 civil war", "\x9B \x98 \x99s", "a \x9B disease", "\x96 earthquakes", "\x96 solar activity"),
+  /* 8A */	new desc_choice("its \x83 \x84", "the \xB1 \x98 \x99","its inhabitants' \x9A \x85", "\xA1", "its \x8D \x8E"),
+  /* 8B */	new desc_choice("juice", "brandy", "water", "brew", "gargle blasters"),
+  /* 8C */	new desc_choice("\xB2", "\xB1 \x99", "\xB1 \xB2", "\xB1 \x9B", "\x9B \xB2"),
+  /* 8D */	new desc_choice("fabulous", "exotic", "hoopy", "unusual", "exciting"),
+  /* 8E */	new desc_choice("cuisine", "night life", "casinos", "sit coms", " \xA1 "),
+  /* 8F */	new desc_choice("\xB0", "The planet \xB0", "The world \xB0", "This planet", "This world"),
+  /* 90 */	new desc_choice("n unremarkable", " boring", " dull", " tedious", " revolting"),
+  /* 91 */	new desc_choice("planet", "world", "place", "little planet", "dump"),
+  /* 92 */	new desc_choice("wasp", "moth", "grub", "ant", "\xB2"),
+  /* 93 */	new desc_choice("poet", "arts graduate", "yak", "snail", "slug"),
+  /* 94 */	new desc_choice("tropical", "dense", "rain", "impenetrable", "exuberant"),
+  /* 95 */	new desc_choice("funny", "wierd", "unusual", "strange", "peculiar"),
+  /* 96 */	new desc_choice("frequent", "occasional", "unpredictable", "dreadful", "deadly"),
+  /* 97 */	new desc_choice("\x82 \x81 for \x8A", "\x82 \x81 for \x8A and \x8A", "\x88 by \x89", "\x82 \x81 for \x8A but \x88 by \x89","a\x90 \x91"),
+  /* 98 */	new desc_choice("\x9B", "mountain", "edible", "tree", "spotted"),
+  /* 99 */	new desc_choice("\x9F", "\xA0", "\x87oid", "\x93", "\x92"),
+  /* 9A */	new desc_choice("ancient", "exceptional", "eccentric", "ingrained", "\x95"),
+  /* 9B */	new desc_choice("killer", "deadly", "evil", "lethal", "vicious"),
+  /* 9C */	new desc_choice("parking meters", "dust clouds", "ice bergs", "rock formations", "volcanoes"),
+  /* 9D */	new desc_choice("plant", "tulip", "banana", "corn", "\xB2weed"),
+  /* 9E */	new desc_choice("\xB2", "\xB1 \xB2", "\xB1 \x9B", "inhabitant", "\xB1 \xB2"),
+  /* 9F */	new desc_choice("shrew", "beast", "bison", "snake", "wolf"),
+  /* A0 */	new desc_choice("leopard", "cat", "monkey", "goat", "fish"),
+  /* A1 */	new desc_choice("\x8C \x8B", "\xB1 \x9F \xA2","its \x8D \xA0 \xA2", "\xA3 \xA4", "\x8C \x8B"),
+  /* A2 */	new desc_choice("meat", "cutlet", "steak", "burgers", "soup"),
+  /* A3 */	new desc_choice("ice", "mud", "Zero-G", "vacuum", "\xB1 ultra"),
+  /* A4 */	new desc_choice("hockey", "cricket", "karate", "polo", "tennis")
 ];
 
 /* B0 = <planet name>
@@ -868,18 +926,16 @@ function gen_rnd_number() {
 
 function goat_soup(source, psy) {
   for (let source_i = 0; source_i < source.strlen(); source_i++) {
-    let c = source.get(source_i);
+    const c = source.get(source_i);
     if (c === 0) break;
     if (c < 0x80) printf("%c", c);
     else {
       if (c <= 0xa4) {
-        let rnd = gen_rnd_number();
+        const rnd = gen_rnd_number();
         goat_soup(
-          c_string.from(
-            desc_list[c - 0x81].option[
-              (rnd >= 0x33) + (rnd >= 0x66) + (rnd >= 0x99) + (rnd >= 0xcc)
-            ]
-          ),
+          desc_list[c - 0x81].option[
+            (rnd >= 0x33) + (rnd >= 0x66) + (rnd >= 0x99) + (rnd >= 0xcc)
+          ],
           psy
         );
       } else
@@ -889,7 +945,7 @@ function goat_soup(source, psy) {
               let i = 1;
               printf("%c", psy.name.get(0));
               while (psy.name.get(i) != 0)
-                printf("%c", tolower(psy.name.getChar(i++)));
+                printf("%c", tolower(psy.name.get(i++)));
             }
             break;
           case 0xb1 /* <planet name>ian */:
@@ -901,7 +957,7 @@ function goat_soup(source, psy) {
                   psy.name.get(i + 1) != 0 ||
                   (psy.name.getChar(i) != "E" && psy.name.getChar(i) != "I")
                 )
-                  printf("%c", tolower(psy.name.getChar(i)));
+                  printf("%c", tolower(psy.name.get(i)));
                 i++;
               }
               printf("ian");
@@ -914,12 +970,12 @@ function goat_soup(source, psy) {
               for (i = 0; i <= len; i++) {
                 let x = gen_rnd_number() & 0x3e;
                 if (i == 0) {
-                  printf("%c", pairs0[x]);
+                  printf("%c", pairs0.get(x));
                 } else {
-                  printf("%c", tolower(pairs0[x]));
+                  printf("%c", tolower(pairs0.get(x)));
                 }
 
-                printf("%c", tolower(pairs0[x + 1]));
+                printf("%c", tolower(pairs0.get(x + 1)));
               } // endfor
             }
             break;

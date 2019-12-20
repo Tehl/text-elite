@@ -14,7 +14,9 @@ c_string.prototype.set = function(idx, value) {
     this._data[idx] = value;
     return;
   }
-  throw new Error("out of range");
+  if (idx > 0 || value > 0) {
+    throw new Error("out of range");
+  }
 };
 
 c_string.prototype.getChar = function(idx) {
@@ -29,8 +31,6 @@ c_string.prototype.strlen = function() {
   let len = this._data.indexOf(0);
   if (len < 0) {
     len = this._data.length;
-  } else {
-    len += 1;
   }
   return len;
 };
@@ -44,6 +44,10 @@ c_string.prototype.toString = function() {
 };
 
 c_string.from = function(value) {
+  if (value instanceof c_string) {
+    return value;
+  }
+
   const result = new c_string(value.length);
   for (let i = 0; i < value.length; i++) {
     result.setChar(i, value[i]);
