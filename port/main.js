@@ -33,12 +33,16 @@ const tonnes = 0;
 const maxlen = 20; /* Length of strings */
 
 /* four byte random number used for planet description */
-function fastseedtype() {
-  this.a = 0; // uint8
-  this.b = 0; // uint8
-  this.c = 0; // uint8
-  this.d = 0; // uint8
+function fastseedtype(a, b, c, d) {
+  this.a = a || 0; // uint8
+  this.b = b || 0; // uint8
+  this.c = c || 0; // uint8
+  this.d = d || 0; // uint8
 }
+
+fastseedtype.prototype.clone = function() {
+  return new fastseedtype(this.a, this.b, this.c, this.d);
+};
 
 /* six byte random number used as seed for planets */
 function seedtype() {
@@ -565,7 +569,7 @@ function prisys(plsy, compressed) {
     printf("\nRadius: %u", plsy.radius);
     printf("\nPopulation: %u Billion", plsy.population >> 3);
 
-    rnd_seed = plsy.goatsoupseed;
+    rnd_seed = plsy.goatsoupseed.clone();
     printf("\n");
     goat_soup(c_string.from("\x8F is \x97."), plsy);
   }
@@ -916,7 +920,7 @@ function gen_rnd_number() {
   rnd_seed.a = a & 0xff;
   rnd_seed.c = x;
 
-  a = a / 256; /* a = any carry left from above */
+  a = Math.floor(a / 256); /* a = any carry left from above */
   x = rnd_seed.b;
   a = (a + x + rnd_seed.d) & 0xff;
   rnd_seed.b = a;
