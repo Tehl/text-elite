@@ -2,6 +2,9 @@ const readline = require("readline");
 const c_string = require("./c_string");
 const _printf = require("./printf");
 
+const floor = Math.floor.bind(Math);
+const sqrt = Math.sqrt.bind(Math);
+
 const charMap = {
   a: "a".charCodeAt(0),
   z: "z".charCodeAt(0),
@@ -19,6 +22,22 @@ function printf() {
   process.stdout.write(_printf.apply(_printf, args));
 }
 
+function atof(value) {
+  let result = parseFloat(value);
+  if (isNaN(result)) {
+    result = 0;
+  }
+  return result;
+}
+
+function atoi(value) {
+  let result = parseInt(value, 10);
+  if (isNaN(result)) {
+    result = 0;
+  }
+  return result;
+}
+
 function allocArray(length, value) {
   return Array(length).fill(value || 0);
 }
@@ -29,15 +48,22 @@ function allocArray(length, value) {
 /* Converted by Ian Bell from 6502 Elite sources.
    Original 6502 Elite by Ian Bell & David Braben. */
 
-const tonnes = 0;
-const maxlen = 20; /* Length of strings */
+/* 
+typedef unsigned char uint8;
+typedef unsigned short uint16;
+typedef signed short int16;
+typedef signed long int32;
+*/
+
+/* define */ const tonnes = 0;
+/* define */ const maxlen = 20; /* Length of strings */
 
 /* four byte random number used for planet description */
 function fastseedtype(a, b, c, d) {
-  this.a = a || 0; // uint8
-  this.b = b || 0; // uint8
-  this.c = c || 0; // uint8
-  this.d = d || 0; // uint8
+  /* uint8 */ this.a = a || 0;
+  /* uint8 */ this.b = b || 0;
+  /* uint8 */ this.c = c || 0;
+  /* uint8 */ this.d = d || 0;
 }
 
 fastseedtype.prototype.clone = function() {
@@ -46,81 +72,82 @@ fastseedtype.prototype.clone = function() {
 
 /* six byte random number used as seed for planets */
 function seedtype() {
-  this.w0 = 0; // uint16
-  this.w1 = 0; // uint16
-  this.w2 = 0; // uint16
+  /* uint16 */ this.w0 = 0;
+  /* uint16 */ this.w1 = 0;
+  /* uint16 */ this.w2 = 0;
 }
 
 function plansys() {
-  this.x = 0; // uint
-  this.y = 0; // uint /* One byte unsigned */
-  this.economy = 0; // uint  /* These two are actually only 0-7  */
-  this.govtype = 0; // uint
-  this.techlev = 0; // uint /* 0-16 i think */
-  this.population = 0; // uint /* One byte */
-  this.productivity = 0; // uint /* Two byte */
-  this.radius = 0; // uint /* Two byte (not used by game at all) */W
-  this.goatsoupseed = new fastseedtype(); // fastseedtype
-  this.name = new c_string(12); // char[]
+  /* uint16 */ this.x = 0;
+  /* uint16 */ this.y = 0; /*             One byte unsigned */
+  /* uint16 */ this.economy = 0; /*       These two are actually only 0-7  */
+  /* uint16 */ this.govtype = 0;
+  /* uint16 */ this.techlev = 0; /*       0-16 i think */
+  /* uint16 */ this.population = 0; /*    One byte */
+  /* uint16 */ this.productivity = 0; /*  Two byte */
+  /* uint16 */ this.radius = 0; /*        Two byte (not used by game at all) */
+  /* fastseedtype */ this.goatsoupseed = new fastseedtype();
+  /* c_string */ this.name = new c_string(12);
 }
 
-const galsize = 256;
-const AlienItems = 16;
-const lasttrade = AlienItems;
+/* define */ const galsize = 256;
+/* define */ const AlienItems = 16;
+/* define */ const lasttrade = AlienItems;
 
-const numforLave = 7; /* Lave is 7th generated planet in galaxy one */
-const numforZaonce = 129;
-const numforDiso = 147;
-const numforRied = 46;
+/* define */ const numforLave = 7; /* Lave is 7th generated planet in galaxy one */
+/* define */ const numforZaonce = 129;
+/* define */ const numforDiso = 147;
+/* define */ const numforRied = 46;
 
-const galaxy = allocArray(galsize, null);
-const seed = new seedtype();
-let rnd_seed = new fastseedtype();
+/* plansys[] */ const galaxy = allocArray(galsize, null);
+/* seedtype */ const seed = new seedtype();
+/* fastseedtype */ let rnd_seed = new fastseedtype();
 
 function tradegood(baseprice, gradient, basequant, maskbyte, units, name) {
-  /* In 6502 version these were: */
-  this.baseprice = baseprice; // uint /* one byte */
-  this.gradient = gradient; // int16 /* five bits plus sign */
-  this.basequant = basequant; // uint /* one byte */
-  this.maskbyte = maskbyte; // uint /* two bits */
-  this.units = units; // uint /* longest="Radioactives" */
-  this.name = c_string.from(name); // char[20]
+  /*                                                In 6502 version these were: */
+  /* uint16 */ this.baseprice = baseprice; /*           one byte */
+  /* int16 */ this.gradient = gradient; /*            five bits plus sign */
+  /* uint16 */ this.basequant = basequant; /*           one byte */
+  /* uint16 */ this.maskbyte = maskbyte; /*             one byte */
+  /* uint16 */ this.units = units; /*                   two bits */
+  /* c_string */ this.name = c_string.from(name); /*  longest="Radioactives" */
 }
 
 function markettype() {
-  this.quantity = allocArray(lasttrade + 1); // uint [lasttrade+1]
-  this.price = allocArray(lasttrade + 1); // uint [lasttrade+1]
+  /* uint16[] */ this.quantity = allocArray(lasttrade + 1);
+  /* uint16[] */ this.price = allocArray(lasttrade + 1);
 }
 
 /* Player workspace */
-let shipshold = allocArray(lasttrade + 1); // uint [lasttrade + 1] /* Contents of cargo bay */
-let currentplanet; // planetnum /* Current planet */
-let galaxynum; // uint /* Galaxy number (1-8) */
-let cash = 0; // int32
-let fuel = 0; // uint
-let localmarket; // markettype
-let holdspace = 0; // uint
+// prettier-ignore
+/* uint16[] */ const shipshold = allocArray(lasttrade + 1); /* Contents of cargo bay */
+/* int */ let currentplanet; /* Current planet */
+/* uint16 */ let galaxynum; /* Galaxy number (1-8) */
+/* int32 */ let cash = 0;
+/* uint16 */ let fuel = 0;
+/* markettype */ let localmarket;
+/* uint16 */ let holdspace = 0;
 
-const fuelcost = 2; // int /* 0.2 CR/Light year */
-const maxfuel = 70; // int /* 7.0 LY tank */
+/* int */ const fuelcost = 2; /* 0.2 CR/Light year */
+/* int */ const maxfuel = 70; /* 7.0 LY tank */
 
-const base0 = 0x5a4a; // uint16
-const base1 = 0x0248; // uint16
-const base2 = 0xb753; // uint16 /* Base seed for galaxy 1 */
+/* uint16 */ const base0 = 0x5a4a;
+/* uint16 */ const base1 = 0x0248;
+/* uint16 */ const base2 = 0xb753; /* Base seed for galaxy 1 */
 
 // 1.5 planet names fix
-const pairs0 = c_string.from(
+/* c_string */ const pairs0 = c_string.from(
   "ABOUSEITILETSTONLONUTHNOALLEXEGEZACEBISOUSESARMAINDIREA.ERATENBERALAVETIEDORQUANTEISRION"
 );
 
-const pairs = c_string.from(
+/* c_string */ const pairs = c_string.from(
   "..LEXEGEZACEBISO" +
     "USESARMAINDIREA." +
     "ERATENBERALAVETI" +
-    "EDORQUANTEISRION"
-); /* Dots should be nullprint characters */
+    "EDORQUANTEISRION" /*   Dots should be nullprint characters */
+);
 
-const govnames = [
+/* string[] */ const govnames = [
   "Anarchy",
   "Feudal",
   "Multi-gov",
@@ -131,7 +158,7 @@ const govnames = [
   "Corporate State"
 ];
 
-const econnames = [
+/* string[] */ const econnames = [
   "Rich Ind",
   "Average Ind",
   "Poor Ind",
@@ -142,9 +169,13 @@ const econnames = [
   "Poor Agri"
 ];
 
-const unitnames = ["t", "kg", "g"];
+/* string[] */ const unitnames = ["t", "kg", "g"];
 
-const commodities = [
+/* Data for DB's price/availability generation system */
+/*              Base  Grad   Base  Mask Un  Name
+                price ient   quant      it             */
+
+/* tradegood[] */ const commodities = [
   new tradegood(0x13, -0x02, 0x06, 0x01, 0, "Food        "),
   new tradegood(0x14, -0x01, 0x0a, 0x03, 0, "Textiles    "),
   new tradegood(0x41, -0x03, 0x02, 0x07, 0, "Radioactives"),
@@ -165,14 +196,14 @@ const commodities = [
 ];
 
 /**-Required data for text interface **/
-const tradnames = commodities.map(
+/* c_string[] */ const tradnames = commodities.map(
   x => x.name
 ); /* Tradegood names used in text commands
       Set using commodities array */
 
-const nocomms = 14;
+/* define */ const nocomms = 14;
 
-const commands = [
+/* c_string[] */ const commands = [
   "buy",
   "sell",
   "fuel",
@@ -189,7 +220,7 @@ const commands = [
   "rand"
 ].map(c_string.from);
 
-const comfuncs = [
+/* function[] */ const comfuncs = [
   dobuy,
   dosell,
   dofuel,
@@ -208,16 +239,17 @@ const comfuncs = [
 
 /**- General functions **/
 
-let lastrand = 0;
+/* unsigned int */ let lastrand = 0;
 
-function mysrand(seed) {
+function /* void */ mysrand(/* unsigned int */ seed) {
   lastrand = seed - 1;
 }
 
-function myrand() {
-  // As supplied by D McDonnell	from SAS Insititute C
+function /* int */ myrand(/* void */) {
+  /* int */ let r;
   // prettier-ignore
-  const r = (((((((((((lastrand << 3) - lastrand) << 3)
+  // As supplied by D McDonnell	from SAS Insititute C
+  r = (((((((((((lastrand << 3) - lastrand) << 3)
       + lastrand) << 1) + lastrand) << 4)
       - lastrand) << 1) - lastrand) + 0xe60)
       & 0x7fffffff;
@@ -225,32 +257,28 @@ function myrand() {
   return r;
 }
 
-function randbyte() {
+function /* char */ randbyte() {
   return String(myrand() & 0xff);
 }
 
-function mymin(a, b) {
+function /* uint16 */ mymin(/* uint16 */ a, /* uint16 */ b) {
   if (a < b) return a;
   else return b;
 }
 
-function stop(string) {
-  printf("\n%s", string);
-  process.exit(1);
-}
-
 /**+  ftoi **/
-function ftoi(value) {
-  return Math.floor(value + 0.5);
+function /* signed int */ ftoi(/* double */ value) {
+  return floor(value + 0.5);
 }
 
 /**+  ftoi2 **/
-function ftoi2(value) {
-  return Math.floor(value);
+function /* signed int */ ftoi2(/* double */ value) {
+  return floor(value);
 }
 
-function tweakseed(s) {
-  const temp = s.w0 + s.w1 + s.w2; /* 2 byte aritmetic */
+function /* void */ tweakseed(/* seedtype */ s) {
+  /* uint16 */ let temp;
+  temp = s.w0 + s.w1 + s.w2; /* 2 byte aritmetic */
   s.w0 = s.w1;
   s.w1 = s.w2;
   s.w2 = temp;
@@ -259,11 +287,11 @@ function tweakseed(s) {
 /**-String functions for text interface **/
 
 /* Remove all c's from string s */
-function stripout(s, c) {
-  let i = 0;
-  let j = 0;
+function /* void */ stripout(/* c_string */ s, /* char */ c) {
+  /* size_t */ let i = 0;
+  /* size_t */ let j = 0;
   while (i < s.strlen()) {
-    if (s.getChar(i) != c) {
+    if (s.getChar(i) != c[0]) {
       s.setChar(j, s.getChar(i));
       j++;
     }
@@ -272,14 +300,14 @@ function stripout(s, c) {
   s.set(j, 0);
 }
 
-function toupper(c) {
+function /* int */ toupper(/* int */ c) {
   if (c >= charMap.a && c <= charMap.z) {
     return c + charMap.A - charMap.a;
   }
   return c;
 }
 
-function tolower(c) {
+function /* int */ tolower(/* int */ c) {
   if (c >= charMap.A && c <= charMap.Z) {
     return c + charMap.a - charMap.A;
   }
@@ -287,9 +315,9 @@ function tolower(c) {
 }
 
 /* Return nonzero iff string t begins with non-empty string s */
-function stringbeg(s, t) {
-  let i = 0;
-  const l = s.strlen();
+function /* int */ stringbeg(/* c_string */ s, /* c_string */ t) {
+  /* size_t */ let i = 0;
+  /* size_t */ let l = s.strlen();
   if (l > 0) {
     while ((i < l) & (toupper(s.get(i)) == toupper(t.get(i)))) i++;
     if (i == l) return true;
@@ -299,8 +327,12 @@ function stringbeg(s, t) {
 
 /* Check string s against n options in string array a
    If matches ith element return i+1 else return 0 */
-function stringmatch(s, a, n) {
-  let i = 0;
+function /* uint16 */ stringmatch(
+  /* c_string */ s,
+  /* c_string[] */ a,
+  /* uint16 */ n
+) {
+  /* uint16 */ let i = 0;
   while (i < n) {
     if (stringbeg(s, a[i])) return i + 1;
     i++;
@@ -309,10 +341,10 @@ function stringmatch(s, a, n) {
 }
 
 /* Split string s at first space, returning first 'word' in t & shortening s */
-function spacesplit(s, t) {
-  let i = 0;
-  let j = 0;
-  const l = s.strlen();
+function /* void */ spacesplit(/* c_string */ s, /* c_string */ t) {
+  /* size_t */ let i = 0;
+  /* size_t */ let j = 0;
+  /* size_t */ let l = s.strlen();
   while ((i < l) & (s.getChar(i) == " ")) i++; /* Strip leading spaces */
   if (i == l) {
     s.set(0, 0);
@@ -331,15 +363,15 @@ function spacesplit(s, t) {
 
 /* Try to buy ammount a  of good i  Return ammount bought */
 /* Cannot buy more than is availble, can afford, or will fit in hold */
-function gamebuy(i, a) {
-  let t;
+function /* uint16 */ gamebuy(/* uint16 */ i, /* uint16 */ a) {
+  /* uint16 */ let t;
   if (cash < 0) t = 0;
   else {
     t = mymin(localmarket.quantity[i], a);
     if (commodities[i].units == tonnes) {
       t = mymin(holdspace, t);
     }
-    t = mymin(t, Math.floor(cash / localmarket.price[i]));
+    t = mymin(t, floor(cash / localmarket.price[i]));
   }
   shipshold[i] += t;
   localmarket.quantity[i] -= t;
@@ -351,8 +383,8 @@ function gamebuy(i, a) {
 }
 
 /* As gamebuy but selling */
-function gamesell(i, a) {
-  const t = mymin(shipshold[i], a);
+function /* uint16 */ gamesell(/* uint16 */ i, /* uint16 */ a) {
+  /* uint16 */ let t = mymin(shipshold[i], a);
   shipshold[i] -= t;
   localmarket.quantity[i] += t;
   if (commodities[i].units == tonnes) {
@@ -376,13 +408,13 @@ function gamesell(i, a) {
    Internally, all prices are integers.
    The player's cash is held in four bytes. 
  */
-function genmarket(fluct, p) {
-  const market = new markettype();
-  let i;
+function /* markettype */ genmarket(/* uint16 */ fluct, /* plansys */ p) {
+  /* markettype */ let market = new markettype();
+  /* unsigned short */ let i;
   for (i = 0; i <= lasttrade; i++) {
-    let q;
-    let product = p.economy * commodities[i].gradient;
-    let changing = fluct & commodities[i].maskbyte;
+    /* signed int */ let q;
+    /* signed int */ let product = p.economy * commodities[i].gradient;
+    /* signed int */ let changing = fluct & commodities[i].maskbyte;
     q = commodities[i].basequant + changing - product;
     q = q & 0xff;
     if (q & 0x80) {
@@ -399,8 +431,8 @@ function genmarket(fluct, p) {
   return market;
 }
 
-function displaymarket(m) {
-  let i;
+function /* void */ displaymarket(/* markettype */ m) {
+  /* unsigned short */ let i;
   for (i = 0; i <= lasttrade; i++) {
     printf("\n");
     printf(commodities[i].name);
@@ -413,11 +445,11 @@ function displaymarket(m) {
 
 /**-Generate system info from seed **/
 
-function makesystem(s) {
-  const thissys = new plansys();
+function /* plansys */ makesystem(/* seedtype */ s) {
+  /* plansys */ let thissys = new plansys();
 
-  let pair1, pair2, pair3, pair4;
-  let longnameflag = s.w0 & 64;
+  /* uint16 */ let pair1, pair2, pair3, pair4;
+  /* uint16 */ let longnameflag = s.w0 & 64;
 
   thissys.x = s.w1 >> 8;
   thissys.y = s.w0 >> 8;
@@ -480,28 +512,29 @@ function makesystem(s) {
 /* Functions for galactic hyperspace */
 
 /* rotate 8 bit number leftwards */
-function rotatel(x) {
-  const temp = x & 128;
+function /* uint16 */ rotatel(/* uint16 */ x) {
+  /* uint16 */ let temp = x & 128;
   return 2 * (x & 127) + (temp >> 7);
 }
 
-function twist(x) {
+function /* uint16 */ twist(/* uint16 */ x) {
   return 256 * rotatel(x >> 8) + rotatel(x & 255);
 }
 
 /* Apply to base seed; once for galaxy 2  */
 /* twice for galaxy 3, etc. */
 /* Eighth application gives galaxy 1 again*/
-function nextgalaxy(s) {
+function /* void */ nextgalaxy(/* seedtype */ s) {
   s.w0 = twist(s.w0);
   s.w1 = twist(s.w1);
   s.w2 = twist(s.w2);
 }
 
 /* Original game generated from scratch each time info needed */
-function buildgalaxy(galaxynum) {
-  let syscount;
-  let galcount;
+function /* void */ buildgalaxy(/* uint16 */ galaxynum) {
+  /* uint16 */ let syscount;
+  /* uint16 */ let galcount;
+
   seed.w0 = base0;
   seed.w1 = base1;
   seed.w2 = base2;
@@ -519,24 +552,24 @@ function buildgalaxy(galaxynum) {
 
 /**-Functions for navigation **/
 
-function gamejump(i) {
+function /* void */ gamejump(/* int */ i) {
   currentplanet = i;
   localmarket = genmarket(randbyte(), galaxy[i]);
 }
 
 /* Seperation between two planets (4*sqrt(X*X+Y*Y/4)) */
-function distance(a, b) {
+function /* uint16 */ distance(/* plansys */ a, /* plansys */ b) {
   return ftoi(
-    4 * Math.sqrt((a.x - b.x) * (a.x - b.x) + ((a.y - b.y) * (a.y - b.y)) / 4)
+    4 * sqrt((a.x - b.x) * (a.x - b.x) + ((a.y - b.y) * (a.y - b.y)) / 4)
   );
 }
 
 /* Return id of the planet whose name matches passed strinmg
    closest to currentplanet - if none return currentplanet */
-function matchsys(s) {
-  let syscount;
-  let p = currentplanet;
-  let d = 9999;
+function /* int */ matchsys(/* c_string */ s) {
+  /* int */ let syscount;
+  /* int */ let p = currentplanet;
+  /* uint16 */ let d = 9999;
   for (syscount = 0; syscount < galsize; ++syscount) {
     if (stringbeg(s, galaxy[syscount].name)) {
       if (distance(galaxy[syscount], galaxy[currentplanet]) < d) {
@@ -549,7 +582,7 @@ function matchsys(s) {
 }
 
 /**-Print data for given system **/
-function prisys(plsy, compressed) {
+function /* void */ prisys(/* plansys */ plsy, /* bool */ compressed) {
   if (compressed) {
     printf("%10s", plsy.name);
     printf(" TL: %2i ", plsy.techlev + 1);
@@ -577,13 +610,13 @@ function prisys(plsy, compressed) {
 
 /**-Various command functions **/
 
-function dotweakrand(s) {
+function /* bool */ dotweakrand(/* c_string */ s) {
   // not required - native rand() is not supported
 }
 
-function dolocal(s) {
-  let syscount;
-  let d;
+function /* bool */ dolocal(/* c_string */ s) {
+  /* int */ let syscount;
+  /* uint16 */ let d;
   printf("Galaxy number %i", galaxynum);
   for (syscount = 0; syscount < galsize; ++syscount) {
     d = distance(galaxy[syscount], galaxy[currentplanet]);
@@ -598,9 +631,9 @@ function dolocal(s) {
 }
 
 /* Jump to planet name s */
-function dojump(s) {
-  let d;
-  const dest = matchsys(s);
+function /* bool */ dojump(/* c_string */ s) {
+  /* uint16 */ let d;
+  /* int */ let dest = matchsys(s);
   if (dest == currentplanet) {
     printf("\nBad jump");
     return false;
@@ -617,13 +650,12 @@ function dojump(s) {
 }
 
 /* As dojump but no fuel cost */
-function dosneak(s) {
-  const fuelkeep = fuel;
+function /* bool */ dosneak(/* c_string */ s) {
+  /* uint16 */ let fuelkeep = fuel;
+  /* bool*/ let b;
   fuel = 666;
-
-  const b = dojump(s);
+  b = dojump(s);
   fuel = fuelkeep;
-
   return b;
 }
 
@@ -632,7 +664,7 @@ function dosneak(s) {
    arrive at 7th planet) 
    Classic Elite always jumped to planet nearest (0x60,0x60)
 */
-function dogalhyp(s) {
+function /* bool */ dogalhyp(/* c_string */ s) {
   galaxynum++;
   if (galaxynum == 9) {
     galaxynum = 1;
@@ -642,16 +674,16 @@ function dogalhyp(s) {
 }
 
 /* Info on planet */
-function doinfo(s) {
-  const dest = matchsys(s);
+function /* bool */ doinfo(/* c_string */ s) {
+  /* int */ let dest = matchsys(s);
   prisys(galaxy[dest], false);
   return true;
 }
 
-function dohold(s) {
-  const a = parseInt(s, 10);
-  let t = 0;
-  let i;
+function /* bool */ dohold(/* c_string */ s) {
+  /* uint16 */ let a = atoi(s);
+  /* uint16 */ let t = 0;
+  /* uint16 */ let i;
   for (i = 0; i <= lasttrade; ++i) {
     if (commodities[i].units == tonnes) t += shipshold[i];
   }
@@ -664,13 +696,13 @@ function dohold(s) {
 }
 
 /* Sell ammount S(2) of good S(1) */
-function dosell(s) {
-  let i;
-  let a;
-  let t;
-  const s2 = new c_string(maxlen);
+function /* bool */ dosell(/* c_string */ s) {
+  /* uint16 */ let i;
+  /* uint16 */ let a;
+  /* uint16 */ let t;
+  /* c_string */ let s2 = new c_string(maxlen);
   spacesplit(s, s2);
-  a = parseInt(s, 10);
+  a = atoi(s);
   if (a == 0) {
     a = 1;
   }
@@ -696,13 +728,13 @@ function dosell(s) {
 }
 
 /* Buy ammount S(2) of good S(1) */
-function dobuy(s) {
-  let i;
-  let a;
-  let t;
-  const s2 = new c_string(maxlen);
+function /* bool */ dobuy(/* c_string */ s) {
+  /* uint16 */ let i;
+  /* uint16 */ let a;
+  /* uint16 */ let t;
+  /* c_string */ let s2 = new c_string(maxlen);
   spacesplit(s, s2);
-  a = parseInt(s, 10);
+  a = atoi(s);
   if (a == 0) a = 1;
   i = stringmatch(s2, tradnames, lasttrade + 1);
   if (i == 0) {
@@ -722,10 +754,7 @@ function dobuy(s) {
   return true;
 }
 
-function gamefuel(f) {
-  if (isNaN(f)) {
-    return 0;
-  }
+function /* uint16 */ gamefuel(/* uint16 */ f) {
   if (f + fuel > maxfuel) {
     f = maxfuel - fuel;
   }
@@ -740,8 +769,8 @@ function gamefuel(f) {
 }
 
 /* Buy ammount S of fuel */
-function dofuel(s) {
-  const f = gamefuel(Math.floor(10 * parseFloat(s)));
+function /* bool */ dofuel(/* c_string */ s) {
+  /* uint16 */ let f = gamefuel(floor(10 * atof(s)));
   if (f == 0) {
     printf("\nCan't buy any fuel");
   }
@@ -750,29 +779,26 @@ function dofuel(s) {
 }
 
 /* Cheat alter cash by S */
-function docash(s) {
-  const a = 10 * parseFloat(s);
-  if (!isNaN(a)) {
-    cash += a;
-    return true;
-  }
-
+function /* bool */ docash(/* c_string */ s) {
+  /* int */ let a = 10 * atof(s);
+  cash += a;
+  if (a != 0) return true;
   printf("Number not understood");
   return false;
 }
 
-function domkt(s) {
+function /* bool */ domkt(/* c_string */ s) {
   displaymarket(localmarket);
   printf("\nFuel :%.1f", fuel / 10);
   printf("      Holdspace :%it", holdspace);
   return true;
 }
 
-function parser(s) {
+function /* bool */ parser(/* c_string */ s) {
   s = c_string.from(s);
 
-  let i;
-  const c = new c_string(maxlen);
+  /* uint16 */ let i;
+  /* c_string */ let c = new c_string(maxlen);
   spacesplit(s, c);
 
   i = stringmatch(c, commands, nocomms);
@@ -786,12 +812,12 @@ function parser(s) {
   return false;
 }
 
-function doquit(s) {
+function /* bool */ doquit(/* c_string */ s) {
   process.exit(0);
   return false;
 }
 
-function dohelp(s) {
+function /* bool */ dohelp(/* c_string */ s) {
   printf("\nCommands are:");
   printf("\nBuy   tradegood ammount");
   printf("\nSell  tradegood ammount");
@@ -811,7 +837,7 @@ function dohelp(s) {
   return true;
 }
 
-function main() {
+function /* void */ main(/* void */) {
   printf("\nWelcome to Text Elite 1.5.\n");
 
   mysrand(12345); /* Ensure repeatability */
@@ -911,16 +937,16 @@ const desc_list =
 	 B2 = <random name>
 */
 
-function gen_rnd_number() {
-  let a;
-  let x;
+function /* int */ gen_rnd_number(/* void */) {
+  /* int */ let a;
+  /* int */ let x;
   x = (rnd_seed.a * 2) & 0xff;
   a = x + rnd_seed.c;
   if (rnd_seed.a > 127) a++;
   rnd_seed.a = a & 0xff;
   rnd_seed.c = x;
 
-  a = Math.floor(a / 256); /* a = any carry left from above */
+  a = floor(a / 256); /* a = any carry left from above */
   x = rnd_seed.b;
   a = (a + x + rnd_seed.d) & 0xff;
   rnd_seed.b = a;
@@ -928,14 +954,14 @@ function gen_rnd_number() {
   return a;
 }
 
-function goat_soup(source, psy) {
+function /* void */ goat_soup(/* c_string */ source, /* plansys */ psy) {
   for (let source_i = 0; source_i < source.strlen(); source_i++) {
-    const c = source.get(source_i);
+    /* int */ let c = source.get(source_i);
     if (c === 0) break;
     if (c < 0x80) printf("%c", c);
     else {
       if (c <= 0xa4) {
-        const rnd = gen_rnd_number();
+        /* int */ let rnd = gen_rnd_number();
         goat_soup(
           desc_list[c - 0x81].option[
             (rnd >= 0x33) + (rnd >= 0x66) + (rnd >= 0x99) + (rnd >= 0xcc)
@@ -946,7 +972,7 @@ function goat_soup(source, psy) {
         switch (c) {
           case 0xb0 /* planet name */:
             {
-              let i = 1;
+              /* int */ let i = 1;
               printf("%c", psy.name.get(0));
               while (psy.name.get(i) != 0)
                 printf("%c", tolower(psy.name.get(i++)));
@@ -954,7 +980,7 @@ function goat_soup(source, psy) {
             break;
           case 0xb1 /* <planet name>ian */:
             {
-              let i = 1;
+              /* int */ let i = 1;
               printf("%c", psy.name.get(0));
               while (psy.name.get(i) != 0) {
                 if (
@@ -969,10 +995,10 @@ function goat_soup(source, psy) {
             break;
           case 0xb2 /* random name */:
             {
-              let i;
-              let len = gen_rnd_number() & 3;
+              /* int */ let i;
+              /* int */ let len = gen_rnd_number() & 3;
               for (i = 0; i <= len; i++) {
-                let x = gen_rnd_number() & 0x3e;
+                /* int */ let x = gen_rnd_number() & 0x3e;
                 if (i == 0) {
                   printf("%c", pairs0.get(x));
                 } else {
