@@ -1,10 +1,8 @@
 const readline = require("readline");
 const c_string = require("./c_string");
 const { uint16_t, int32_t } = require("./c_types");
+const { atof, atoi, floor, sqrt } = require("./c_math");
 const _printf = require("./printf");
-
-const floor = Math.floor.bind(Math);
-const sqrt = Math.sqrt.bind(Math);
 
 const charMap = {
   a: "a".charCodeAt(0),
@@ -23,23 +21,7 @@ function printf() {
   process.stdout.write(_printf.apply(_printf, args));
 }
 
-function atof(value) {
-  let result = parseFloat(value);
-  if (isNaN(result)) {
-    result = 0;
-  }
-  return result;
-}
-
-function atoi(value) {
-  let result = parseInt(value, 10);
-  if (isNaN(result)) {
-    result = 0;
-  }
-  return result;
-}
-
-function allocArray(length, value) {
+function alloc_array(length, value) {
   return Array(length).fill(value || 0);
 }
 
@@ -100,7 +82,7 @@ function plansys() {
 /* define */ const numforDiso = 147;
 /* define */ const numforRied = 46;
 
-/* plansys[] */ const galaxy = allocArray(galsize, null);
+/* plansys[] */ const galaxy = alloc_array(galsize, null);
 /* seedtype */ const seed = new seedtype();
 /* fastseedtype */ let rnd_seed = new fastseedtype();
 
@@ -115,13 +97,13 @@ function tradegood(baseprice, gradient, basequant, maskbyte, units, name) {
 }
 
 function markettype() {
-  /* uint16[] */ this.quantity = allocArray(lasttrade + 1);
-  /* uint16[] */ this.price = allocArray(lasttrade + 1);
+  /* uint16[] */ this.quantity = alloc_array(lasttrade + 1);
+  /* uint16[] */ this.price = alloc_array(lasttrade + 1);
 }
 
 /* Player workspace */
 // prettier-ignore
-/* uint16[] */ const shipshold = allocArray(lasttrade + 1); /* Contents of cargo bay */
+/* uint16[] */ const shipshold = alloc_array(lasttrade + 1); /* Contents of cargo bay */
 /* int */ let currentplanet; /* Current planet */
 /* uint16 */ let galaxynum; /* Galaxy number (1-8) */
 /* int32 */ let cash = 0;
