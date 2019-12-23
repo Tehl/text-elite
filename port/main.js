@@ -42,6 +42,19 @@ function allocArray(length, value) {
   return Array(length).fill(value || 0);
 }
 
+function uint_t(value) {
+  value = Math.floor(value);
+  while (value > uint_t.maxValue) {
+    value -= uint_t.maxValue + 1;
+  }
+  while (value < 0) {
+    value += uint_t.maxValue + 1;
+  }
+  return value;
+}
+
+uint_t.maxValue = 0xffff;
+
 /* js port of: */
 /* txtelite.c  1.5 */
 /* Textual version of Elite trading (C implementation) */
@@ -278,7 +291,7 @@ function /* signed int */ ftoi2(/* double */ value) {
 
 function /* void */ tweakseed(/* seedtype */ s) {
   /* uint16 */ let temp;
-  temp = s.w0 + s.w1 + s.w2; /* 2 byte aritmetic */
+  temp = uint_t(s.w0 + uint_t(s.w1 + s.w2)); /* 2 byte aritmetic */
   s.w0 = s.w1;
   s.w1 = s.w2;
   s.w2 = temp;
