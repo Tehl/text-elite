@@ -1,5 +1,6 @@
 const readline = require("readline");
 const c_string = require("./c_string");
+const { uint16_t, int32_t } = require("./c_types");
 const _printf = require("./printf");
 
 const floor = Math.floor.bind(Math);
@@ -41,19 +42,6 @@ function atoi(value) {
 function allocArray(length, value) {
   return Array(length).fill(value || 0);
 }
-
-function uint_t(value) {
-  value = Math.floor(value);
-  while (value > uint_t.maxValue) {
-    value -= uint_t.maxValue + 1;
-  }
-  while (value < 0) {
-    value += uint_t.maxValue + 1;
-  }
-  return value;
-}
-
-uint_t.maxValue = 0xffff;
 
 /* js port of: */
 /* txtelite.c  1.5 */
@@ -291,7 +279,7 @@ function /* signed int */ ftoi2(/* double */ value) {
 
 function /* void */ tweakseed(/* seedtype */ s) {
   /* uint16 */ let temp;
-  temp = uint_t(s.w0 + uint_t(s.w1 + s.w2)); /* 2 byte aritmetic */
+  temp = uint16_t(s.w0 + uint16_t(s.w1 + s.w2)); /* 2 byte aritmetic */
   s.w0 = s.w1;
   s.w1 = s.w2;
   s.w2 = temp;
@@ -572,8 +560,13 @@ function /* void */ gamejump(/* int */ i) {
 
 /* Seperation between two planets (4*sqrt(X*X+Y*Y/4)) */
 function /* uint16 */ distance(/* plansys */ a, /* plansys */ b) {
+  // prettier-ignore
   return ftoi(
-    4 * sqrt((a.x - b.x) * (a.x - b.x) + ((a.y - b.y) * (a.y - b.y)) / 4)
+    4 * sqrt(
+      int32_t(
+        (a.x - b.x) * (a.x - b.x) + ((a.y - b.y) * (a.y - b.y)) / 4
+      )
+    )
   );
 }
 
