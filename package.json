@@ -1,0 +1,19 @@
+{
+  "name": "@tehl/txtelite",
+  "version": "1.0.0",
+  "description": "JavaScript port of TXTELITE.C by Ian Bell",
+  "author": "Matt Howe",
+  "scripts": {
+    "format": "prettier --write ./src/**/*.js",
+    "build": "babel src -d dist",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run build && node dist/app/index.js"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "prettier": "^1.19.1"
+  },
+  "license": "MIT"
+}
