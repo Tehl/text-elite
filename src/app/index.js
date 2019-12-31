@@ -1,3 +1,6 @@
-import main from "./main";
+import gameLoop from "./gameLoop";
+import createParser from "./createParser";
 
-main();
+const parser = createParser();
+
+gameLoop(parser);

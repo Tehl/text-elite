@@ -1,6 +1,6 @@
 import readline from "readline";
 
-function main() {
+function gameLoop(parser) {
   const rl = readline.createInterface(process.stdin, process.stdout);
 
   const prompt = () => {
@@ -8,7 +8,9 @@ function main() {
   };
 
   rl.on("line", line => {
-    console.log(line);
+    const command = parser(line);
+    command();
+
     prompt();
   }).on("close", () => {
     process.exit(0);
@@ -17,4 +19,4 @@ function main() {
   prompt();
 }
 
-export default main;
+export default gameLoop;
