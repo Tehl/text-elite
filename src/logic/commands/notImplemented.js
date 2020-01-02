@@ -1,5 +1,5 @@
 export default name => ({
   name,
-  createCommand: args => () =>
+  createCommand: args => (state, eventBus) =>
     console.log("Not implemented: " + name + " (" + args + ")")
 });

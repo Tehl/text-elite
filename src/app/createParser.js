@@ -1,4 +1,7 @@
 import createParser from "../logic/parser";
+import cashCommand from "../logic/commands/cash";
+import quitCommand from "../logic/commands/quit";
+import randCommand from "../logic/commands/rand";
 import notImplemented from "../logic/commands/notImplemented";
 
 const commandDefinitions = [
@@ -6,7 +9,7 @@ const commandDefinitions = [
   notImplemented("sell"),
   notImplemented("fuel"),
   notImplemented("jump"),
-  notImplemented("cash"),
+  cashCommand,
   notImplemented("mkt"),
   notImplemented("help"),
   notImplemented("hold"),
@@ -14,8 +17,8 @@ const commandDefinitions = [
   notImplemented("local"),
   notImplemented("info"),
   notImplemented("galhyp"),
-  notImplemented("quit"),
-  notImplemented("rand")
+  quitCommand,
+  randCommand
 ];
 
 export default () => createParser(commandDefinitions);

@@ -15,5 +15,11 @@
     "@babel/preset-env": "^7.7.7",
     "prettier": "^1.19.1"
   },
+  "dependencies": {
+    "combine-selectors-redux": "0.0.2",
+    "printf": "^0.5.2",
+    "redux": "^4.0.5",
+    "suber": "^5.0.1"
+  },
   "license": "MIT"
 }
