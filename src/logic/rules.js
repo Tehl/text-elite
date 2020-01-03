@@ -5,6 +5,10 @@ export default {
   // 7.0 LY tank
   maxFuel: 70,
 
+  // world gen limits
+  galaxyCount: 8,
+  galaxySize: 256,
+
   // base seed for galaxy 1
   galaxySeed: {
     w0: 0x5a4a,
@@ -15,5 +19,7 @@ export default {
   // initial state for new game
   startingFuel: 70,
   startingCash: 100,
-  startingHoldSize: 20
+  startingHoldSize: 20,
+  startingGalaxy: 1,
+  startingSystem: 7 // lave
 };
