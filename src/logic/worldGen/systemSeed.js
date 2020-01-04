@@ -4,10 +4,15 @@ import { uint16_t } from "../../utility/c_types";
 // rotates the components of an existing seed to produce the next
 // value in the series
 function nextSeed(seed) {
+  const temp = {
+    w0: uint16_t(seed.w0),
+    w1: uint16_t(seed.w1),
+    w2: uint16_t(seed.w2)
+  };
   return {
-    w0: seed.w1,
-    w1: seed.w2,
-    w2: uint16_t(seed.w0 + uint16_t(seed.w1 + seed.w2))
+    w0: temp.w1,
+    w1: temp.w2,
+    w2: uint16_t(temp.w0 + uint16_t(temp.w1 + temp.w2))
   };
 }
 
@@ -45,3 +50,5 @@ function getSystemSeed(seed) {
 }
 
 export default getSystemSeed;
+
+export const _internals = { nextSeed, generatePair };
