@@ -21,7 +21,6 @@ function buildGalaxyFromSeed(seed, size) {
 
 // builds the specified galaxy and fills it with systems
 function buildGalaxy(galaxyNum) {
-  console.log("buildGalaxy " + galaxyNum);
   const seed = getGalaxySeed(galaxyNum, rules.galaxySeed);
   return buildGalaxyFromSeed(seed, rules.galaxySize);
 }

@@ -2,6 +2,7 @@ import createParser from "../logic/parser";
 import cashCommand from "../logic/commands/cash";
 import helpCommand from "../logic/commands/help";
 import holdCommand from "../logic/commands/hold";
+import infoCommand from "../logic/commands/info";
 import quitCommand from "../logic/commands/quit";
 import randCommand from "../logic/commands/rand";
 import notImplemented from "../logic/commands/notImplemented";
@@ -17,7 +18,7 @@ const commandDefinitions = [
   holdCommand,
   notImplemented("sneak"),
   notImplemented("local"),
-  notImplemented("info"),
+  infoCommand,
   notImplemented("galhyp"),
   quitCommand,
   randCommand
