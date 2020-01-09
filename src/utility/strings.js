@@ -14,4 +14,8 @@ function stringBeginsWith(value, target) {
   return value.toUpperCase().indexOf(target.toUpperCase()) === 0;
 }
 
-export { stringSplit, stringBeginsWith };
+function toProperCase(value) {
+  return value[0].toUpperCase() + value.substring(1).toLowerCase();
+}
+
+export { stringSplit, stringBeginsWith, toProperCase };

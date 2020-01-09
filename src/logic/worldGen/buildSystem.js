@@ -1,9 +1,4 @@
-// ref: pairs[]
-const nameChars =
-  "..LEXEGEZACEBISO" +
-  "USESARMAINDIREA." +
-  "ERATENBERALAVETI" +
-  "EDORQUANTEISRION";
+import { systemNamePairs } from "../../data/names";
 
 // ref: makesystem()
 // construct a system name using the intermediate
@@ -12,16 +7,20 @@ function getSystemName(seed) {
   const longName = seed.w0 & 64;
 
   let chars = [
-    nameChars[seed.pair1],
-    nameChars[seed.pair1 + 1],
-    nameChars[seed.pair2],
-    nameChars[seed.pair2 + 1],
-    nameChars[seed.pair3],
-    nameChars[seed.pair3 + 1]
+    systemNamePairs[seed.pair1],
+    systemNamePairs[seed.pair1 + 1],
+    systemNamePairs[seed.pair2],
+    systemNamePairs[seed.pair2 + 1],
+    systemNamePairs[seed.pair3],
+    systemNamePairs[seed.pair3 + 1]
   ];
 
   if (longName) {
-    chars = [...chars, nameChars[seed.pair4], nameChars[seed.pair4 + 1]];
+    chars = [
+      ...chars,
+      systemNamePairs[seed.pair4],
+      systemNamePairs[seed.pair4 + 1]
+    ];
   }
 
   return chars.join("").replace(/\./g, "");

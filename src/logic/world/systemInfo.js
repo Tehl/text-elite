@@ -1,4 +1,5 @@
 import { governmentTypes, economyTypes } from "../../data/strings";
+import getSystemDescription from "../worldGen/goatSoup";
 
 function getFullSystemInfo(system) {
   return [
@@ -9,7 +10,8 @@ function getFullSystemInfo(system) {
     `Tech Level: ${system.techlev + 1}`,
     `Turnover: ${system.productivity}`,
     `Radius: ${system.radius}`,
-    `Population: ${system.population >> 3} Billion`
+    `Population: ${system.population >> 3} Billion`,
+    getSystemDescription(system)
   ];
 }
 
