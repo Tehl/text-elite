@@ -107,38 +107,32 @@ function generateGoatSoup(inputPattern, systemInfo, seed) {
     if (c < 0x80) {
       // use the basic ascii character
       result.push(inputPattern[i]);
+    } else if (c <= 0xa4) {
+      // recursively append a substring from the descriptionOptions set
+      let innerSoup;
+      ({ result: innerSoup, nextSeed } = getInnerSoup(c, systemInfo, nextSeed));
+      result.push(innerSoup);
     } else {
-      if (c <= 0xa4) {
-        // recursively append a substring from the descriptionOptions set
-        let innerSoup;
-        ({ result: innerSoup, nextSeed } = getInnerSoup(
-          c,
-          systemInfo,
-          nextSeed
-        ));
-        result.push(innerSoup);
-      } else {
-        switch (c) {
-          case 0xb0:
-            // <planet_name>
-            result.push(getPlanetName(systemInfo));
-            break;
+      switch (c) {
+        case 0xb0:
+          // <planet_name>
+          result.push(getPlanetName(systemInfo));
+          break;
 
-          case 0xb1:
-            // <planet_name>ian
-            result.push(getPlanetaryOriginName(systemInfo));
-            break;
+        case 0xb1:
+          // <planet_name>ian
+          result.push(getPlanetaryOriginName(systemInfo));
+          break;
 
-          case 0xb2:
-            // random name
-            let name;
-            ({ result: name, nextSeed } = getRandomName(nextSeed));
-            result.push(name);
-            break;
+        case 0xb2:
+          // random name
+          let name;
+          ({ result: name, nextSeed } = getRandomName(nextSeed));
+          result.push(name);
+          break;
 
-          default:
-            throw new Error("Unexpected character in input string: " + c);
-        }
+        default:
+          throw new Error("Unexpected character in input string: " + c);
       }
     }
   }
@@ -160,3 +154,5 @@ function getSystemDescription(systemInfo) {
 }
 
 export default getSystemDescription;
+
+export const _internals = { generateGoatSoup };
