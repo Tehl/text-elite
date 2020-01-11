@@ -1,5 +1,6 @@
 import createParser from "../logic/parser";
 import cashCommand from "../logic/commands/cash";
+import marketCommand from "../logic/commands/market";
 import helpCommand from "../logic/commands/help";
 import holdCommand from "../logic/commands/hold";
 import infoCommand from "../logic/commands/info";
@@ -13,7 +14,7 @@ const commandDefinitions = [
   notImplemented("fuel"),
   notImplemented("jump"),
   cashCommand,
-  notImplemented("mkt"),
+  marketCommand,
   helpCommand,
   holdCommand,
   notImplemented("sneak"),

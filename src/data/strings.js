@@ -20,4 +20,6 @@ const economyTypes = [
   "Poor Agri"
 ];
 
-export { governmentTypes, economyTypes };
+const unitNames = ["t", "kg", "g"];
+
+export { governmentTypes, economyTypes, unitNames };

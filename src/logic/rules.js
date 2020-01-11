@@ -21,5 +21,7 @@ export default {
   startingCash: 100,
   startingHoldSize: 20,
   startingGalaxy: 1,
-  startingSystem: 7 // lave
+  startingSystem: 7, // lave
+  startingMarketFluctuation: 0,
+  startingMarketSeed: 12345
 };

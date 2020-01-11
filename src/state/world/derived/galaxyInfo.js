@@ -1,13 +1,12 @@
 import { createSelector } from "reselect";
 import buildGalaxy from "../../../logic/worldGen/buildGalaxy";
 
-// creates a selector for the 'world' state chunk
-// which uses the currentGalaxy value to derive
-// the galaxy model.
-// we use reselect to create a memoised selector
-// so that the galaxy model is only re-generated
-// when the currentGalaxy changes.
+// creates a selector which uses the currentGalaxy
+// to derive the galaxy model.
+// this should be mounted on the 'world' state chunk.
 function createGalaxyInfoSelector(worldSelectors) {
+  // reselect selectors are memoised, so we only re-generate
+  // our derived data when the inputs change
   return createSelector(
     worldSelectors.currentGalaxy.getCurrentGalaxy,
     currentGalaxy => buildGalaxy(currentGalaxy)
