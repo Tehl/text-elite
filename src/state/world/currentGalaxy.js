@@ -1,4 +1,4 @@
-import { NEW_GAME } from "../../logic/events";
+import { NEW_GAME } from "../../logic/events/events";
 
 const JUMP_TO_GALAXY = "JUMP_TO_GALAXY";
 

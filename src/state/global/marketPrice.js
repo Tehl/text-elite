@@ -1,10 +1,11 @@
 import { createSelector } from "reselect";
 import generateMarket from "../../logic/market/generateMarket";
+import { fromEntries } from "../../utility/object";
 
 // creates a state chunk representing all price data
 // for the specified market
 function createPriceData(marketData) {
-  return Object.fromEntries(marketData.map(x => [x.commodityId, x.price]));
+  return fromEntries(marketData.map(x => [x.commodityId, x.price]));
 }
 
 // selects the market price for a commodity from the

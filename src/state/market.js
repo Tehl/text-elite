@@ -4,13 +4,19 @@ import {
   fluctuationReducer,
   selectors as fluctuationSelectors
 } from "./market/fluctuation";
+import {
+  quantityReducer,
+  selectors as quantitySelectors
+} from "./market/quantity";
 
 const marketReducer = combineReducers({
-  fluctuation: fluctuationReducer
+  fluctuation: fluctuationReducer,
+  quantity: quantityReducer
 });
 
 const marketSelectors = combineSelectors({
-  fluctuation: fluctuationSelectors
+  fluctuation: fluctuationSelectors,
+  quantity: quantitySelectors
 });
 
 export { marketReducer, marketSelectors };

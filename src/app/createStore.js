@@ -15,12 +15,12 @@ export default eventBus => {
   );
 
   // echo all event bus events into the store, with the channel as the action type
-  eventBus.applyMiddleware(_ => (channel, message, source) => {
+  eventBus.applyMiddleware((_, origin) => (channel, message, source) => {
     if (source === "redux") {
       return;
     }
 
-    store.dispatch({ ...message, type: channel });
+    store.dispatch({ ...message, type: channel, ...origin });
   });
 
   return store;

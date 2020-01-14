@@ -1,4 +1,4 @@
-import { NEW_GAME } from "../../logic/events";
+import { NEW_GAME } from "../../logic/events/events";
 
 const PLAYER_GAINED_FUEL = "PLAYER_GAINED_FUEL";
 const PLAYER_LOST_FUEL = "PLAYER_LOST_FUEL";

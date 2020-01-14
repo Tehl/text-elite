@@ -1,4 +1,4 @@
-import { NEW_GAME, MARKET_UPDATED } from "../../logic/events";
+import { MARKET_UPDATED } from "../../logic/events/events";
 
 const defaultValue = {
   current: 0,
@@ -7,12 +7,6 @@ const defaultValue = {
 
 function fluctuationReducer(state = defaultValue, action) {
   switch (action.type) {
-    case NEW_GAME:
-      return {
-        current: action.startingMarketFluctuation,
-        seed: action.startingMarketSeed
-      };
-
     case MARKET_UPDATED:
       return {
         current: action.fluctuation,

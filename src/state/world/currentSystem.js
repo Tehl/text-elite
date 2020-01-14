@@ -1,6 +1,4 @@
-import { NEW_GAME } from "../../logic/events";
-
-const JUMP_TO_SYSTEM = "JUMP_TO_SYSTEM";
+import { NEW_GAME, JUMP_TO_SYSTEM } from "../../logic/events/events";
 
 const defaultValue = 0;
 
@@ -20,8 +18,6 @@ function currentSystemReducer(state = defaultValue, action) {
 function getCurrentSystem(state) {
   return state;
 }
-
-export { JUMP_TO_SYSTEM };
 
 export { currentSystemReducer };
 

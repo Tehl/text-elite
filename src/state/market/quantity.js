@@ -1,14 +1,12 @@
-import { NEW_GAME, MARKET_UPDATED } from "../../logic/events";
+import { MARKET_UPDATED } from "../../logic/events/events";
+import { fromEntries } from "../../utility/object";
 
 const defaultValue = {};
 
 function quantityReducer(state = defaultValue, action) {
   switch (action.type) {
-    case NEW_GAME:
-      return {};
-
     case MARKET_UPDATED:
-      return Object.fromEntries(
+      return fromEntries(
         action.commodites.map(x => [x.commodityId, x.quantity])
       );
 
