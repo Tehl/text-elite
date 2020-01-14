@@ -1,6 +1,12 @@
 import { PLAYER_SET_HOLD_SIZE } from "../../state/player/holdSize";
 
-export default {
+const COMMAND_HOLD = "COMMAND_HOLD";
+
+function onHoldCommand(state, eventBus, event) {
+  eventBus.send(PLAYER_SET_HOLD_SIZE, { value: event.holdSize });
+}
+
+export const commandParser = {
   name: "hold",
   createCommand: args => (state, eventBus) => {
     const holdSize = parseInt(args, 10);
@@ -15,7 +21,11 @@ export default {
       return false;
     }
 
-    eventBus.send(PLAYER_SET_HOLD_SIZE, { value: holdSize });
+    eventBus.send(COMMAND_HOLD, { holdSize });
     return true;
   }
+};
+
+export const registerEvents = (eventBus, serviceProvider) => {
+  eventBus.take(COMMAND_HOLD, serviceProvider(onHoldCommand));
 };
