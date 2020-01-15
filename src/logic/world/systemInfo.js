@@ -15,4 +15,12 @@ function getFullSystemInfo(system) {
   ];
 }
 
-export { getFullSystemInfo };
+function getShortSystemInfo(system) {
+  const name = system.name.padStart(10);
+  const techLevel = String(system.techlev + 1).padStart(2);
+  const economy = economyTypes[system.economy].padStart(12);
+  const govType = governmentTypes[system.govtype].padStart(15);
+  return `${name} TL: ${techLevel} ${economy} ${govType}`;
+}
+
+export { getFullSystemInfo, getShortSystemInfo };

@@ -4,6 +4,7 @@ import { commandParser as marketCommand } from "../logic/commands/market";
 import { commandParser as helpCommand } from "../logic/commands/help";
 import { commandParser as holdCommand } from "../logic/commands/hold";
 import { commandParser as infoCommand } from "../logic/commands/info";
+import { commandParser as localCommand } from "../logic/commands/local";
 import { commandParser as quitCommand } from "../logic/commands/quit";
 import { commandParser as randCommand } from "../logic/commands/rand";
 import notImplemented from "../logic/commands/notImplemented";
@@ -18,7 +19,7 @@ const commandDefinitions = [
   helpCommand,
   holdCommand,
   notImplemented("sneak"),
-  notImplemented("local"),
+  localCommand,
   infoCommand,
   notImplemented("galhyp"),
   quitCommand,

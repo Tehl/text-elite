@@ -28,4 +28,4 @@ function findNearestByName(galaxy, currentSystem, targetName) {
   return matchingSystems[0] ? matchingSystems[0].system : null;
 }
 
-export { findNearestByName };
+export { distanceBetween, findNearestByName };
