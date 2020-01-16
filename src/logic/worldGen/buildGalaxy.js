@@ -13,6 +13,7 @@ function buildGalaxyFromSeed(seed, size) {
   for (let i = 0; i < size; i++) {
     ({ current, next } = getSystemSeed(current));
     galaxy[i] = buildSystem(current);
+    galaxy[i].systemId = i;
     current = next;
   }
 

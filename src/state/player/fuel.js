@@ -1,7 +1,4 @@
-import { NEW_GAME } from "../../logic/events/events";
-
-const PLAYER_GAINED_FUEL = "PLAYER_GAINED_FUEL";
-const PLAYER_LOST_FUEL = "PLAYER_LOST_FUEL";
+import { NEW_GAME, JUMP_TO_SYSTEM } from "../../logic/events/events";
 
 const defaultValue = 0;
 
@@ -10,11 +7,8 @@ function fuelReducer(state = defaultValue, action) {
     case NEW_GAME:
       return action.startingFuel;
 
-    case PLAYER_GAINED_FUEL:
-      return state + action.value;
-
-    case PLAYER_LOST_FUEL:
-      return state - action.value;
+    case JUMP_TO_SYSTEM:
+      return state - action.fuelCost;
 
     default:
       return state;
@@ -24,8 +18,6 @@ function fuelReducer(state = defaultValue, action) {
 function getFuel(state) {
   return state;
 }
-
-export { PLAYER_GAINED_FUEL, PLAYER_LOST_FUEL };
 
 export { fuelReducer };
 

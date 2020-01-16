@@ -8,7 +8,7 @@ function currentSystemReducer(state = defaultValue, action) {
       return action.startingSystem;
 
     case JUMP_TO_SYSTEM:
-      return action.target;
+      return action.targetSystem;
 
     default:
       return state;

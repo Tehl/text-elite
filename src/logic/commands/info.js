@@ -23,6 +23,8 @@ function onInfoCommand(state, eventBus, event) {
   eventBus.send(DISPLAY_FEEDBACK_INFO, { message: systemInfoText });
 }
 
+export { COMMAND_INFO };
+
 export const commandParser = {
   name: "info",
   createCommand: args => (state, eventBus) => {
