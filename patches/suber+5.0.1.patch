@@ -1,0 +1,14 @@
+diff --git a/node_modules/suber/lib/bus.js b/node_modules/suber/lib/bus.js
+index d5d372d..e464f37 100644
+--- a/node_modules/suber/lib/bus.js
++++ b/node_modules/suber/lib/bus.js
+@@ -77,8 +77,8 @@ var createBus = exports.createBus = function createBus() {
+     var source = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'app';
+ 
+     if (!channel) return;
+-    sendMessageToSubscribers(channel, message);
+     sendMessageToMiddlewares(channel, message, source);
++    sendMessageToSubscribers(channel, message);
+   };
+   var _self = function _self(channel, message, fn) {
+     var $$responseChannel = 'SELF_REF_' + getId();

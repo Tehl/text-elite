@@ -4,6 +4,7 @@
   "description": "JavaScript port of TXTELITE.C by Ian Bell",
   "author": "Matt Howe",
   "scripts": {
+    "postinstall": "patch-package",
     "format": "prettier --write ./{src,test}/**/*.js",
     "build": "babel src -d dist",
     "test": "mocha --require @babel/register ./test/**/*.test.js",
@@ -20,6 +21,7 @@
   },
   "dependencies": {
     "combine-selectors-redux": "0.0.2",
+    "patch-package": "^6.2.0",
     "printf": "^0.5.2",
     "redux": "^4.0.5",
     "reselect": "^4.0.0",
