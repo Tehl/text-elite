@@ -1,4 +1,8 @@
-import { NEW_GAME, JUMP_TO_SYSTEM } from "../../logic/events/events";
+import {
+  NEW_GAME,
+  JUMP_TO_SYSTEM,
+  PURCHASE_FUEL
+} from "../../logic/events/events";
 
 const defaultValue = 0;
 
@@ -9,6 +13,9 @@ function fuelReducer(state = defaultValue, action) {
 
     case JUMP_TO_SYSTEM:
       return state - action.fuelCost;
+
+    case PURCHASE_FUEL:
+      return state + action.fuelAmount;
 
     default:
       return state;
