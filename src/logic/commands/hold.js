@@ -1,4 +1,5 @@
 import { PLAYER_SET_HOLD_SIZE } from "../../state/player/holdSize";
+import { DISPLAY_FEEDBACK_FAILURE } from "../events/events";
 
 const COMMAND_HOLD = "COMMAND_HOLD";
 
@@ -11,13 +12,17 @@ export const commandParser = {
   createCommand: args => (state, eventBus) => {
     const holdSize = parseInt(args, 10);
     if (isNaN(holdSize)) {
-      console.log("Number not understood");
+      eventBus.send(DISPLAY_FEEDBACK_FAILURE, {
+        message: "Number not understood"
+      });
       return false;
     }
 
     // todo: validate available space
     if (false) {
-      console.log("Hold too full");
+      eventBus.send(DISPLAY_FEEDBACK_FAILURE, {
+        message: "Hold too full"
+      });
       return false;
     }
 

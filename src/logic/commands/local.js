@@ -5,6 +5,7 @@ import {
 } from "../../state/selectors";
 import { getShortSystemInfo } from "../world/systemInfo";
 import { distanceBetween } from "../world/navigation";
+import { DISPLAY_FEEDBACK_INFO } from "../events/events";
 import rules from "../rules";
 
 const COMMAND_LOCAL = "COMMAND_LOCAL";
@@ -28,7 +29,7 @@ function onLocalCommand(state, eventBus, event) {
     return ` ${inRange} ${info} (${distance.toFixed(1)} LY)`;
   });
 
-  localSystemInfo.forEach(x => console.log(x));
+  eventBus.send(DISPLAY_FEEDBACK_INFO, { message: localSystemInfo });
 }
 
 export const commandParser = {

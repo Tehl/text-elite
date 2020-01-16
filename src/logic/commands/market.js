@@ -1,14 +1,15 @@
-import printf from "printf";
 import { getMarketPrice } from "../../state/selectors";
 import { commodities } from "../../data/commodities";
+import { DISPLAY_FEEDBACK_INFO } from "../events/events";
 
 const COMMAND_MARKET = "COMMAND_MARKET";
 
 function onMarketCommand(state, eventBus, event) {
-  commodities.forEach(x => {
-    const price = getMarketPrice(state, x.commodityId);
-
-    console.log(`${x.name}   ${printf("%.1f", price / 10)}   ${0}`);
+  eventBus.send(DISPLAY_FEEDBACK_INFO, {
+    message: commodities.map(x => {
+      const price = getMarketPrice(state, x.commodityId);
+      return `${x.name}   ${(price / 10).toFixed(1)}   ${0}`;
+    })
   });
 }
 

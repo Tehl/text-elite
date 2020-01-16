@@ -1,6 +1,7 @@
 import rules from "../rules";
 import { NEW_GAME } from "./events";
 import { COMMAND_HELP } from "../commands/help";
+import { DISPLAY_FEEDBACK_INFO } from "../events/events";
 
 function beginNewGame(eventBus) {
   eventBus.send(NEW_GAME, {
@@ -10,7 +11,9 @@ function beginNewGame(eventBus) {
 }
 
 function onNewGameEvent(state, eventBus, event) {
-  console.log("\nWelcome to Text Elite 1.5.\n");
+  eventBus.send(DISPLAY_FEEDBACK_INFO, {
+    message: "\nWelcome to Text Elite 1.5.\n"
+  });
   eventBus.send(COMMAND_HELP, {});
 }
 

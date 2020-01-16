@@ -1,6 +1,7 @@
 import { getCurrentSystem, getGalaxyInfo } from "../../state/selectors";
 import { findNearestByName } from "../world/navigation";
 import { getFullSystemInfo } from "../world/systemInfo";
+import { DISPLAY_FEEDBACK_INFO } from "../events/events";
 
 const COMMAND_INFO = "COMMAND_INFO";
 
@@ -17,9 +18,9 @@ function onInfoCommand(state, eventBus, event) {
     targetSystem = currentSystem;
   }
 
-  const systemInfo = getFullSystemInfo(targetSystem);
+  const systemInfoText = getFullSystemInfo(targetSystem);
 
-  console.log(systemInfo.join("\n"));
+  eventBus.send(DISPLAY_FEEDBACK_INFO, { message: systemInfoText });
 }
 
 export const commandParser = {

@@ -1,4 +1,5 @@
 import { PLAYER_GAINED_CASH } from "../../state/player/cash";
+import { DISPLAY_FEEDBACK_FAILURE } from "../events/events";
 
 const COMMAND_CASH = "COMMAND_CASH";
 
@@ -11,7 +12,9 @@ export const commandParser = {
   createCommand: args => (state, eventBus) => {
     const cashValue = parseInt(args, 10);
     if (isNaN(cashValue)) {
-      console.log("Number not understood");
+      eventBus.send(DISPLAY_FEEDBACK_FAILURE, {
+        message: "Number not understood"
+      });
       return false;
     }
 
