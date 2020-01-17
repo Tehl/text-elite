@@ -1,10 +1,9 @@
-import { PLAYER_SET_HOLD_SIZE } from "../../state/player/holdSize";
-import { DISPLAY_FEEDBACK_FAILURE } from "../events/events";
+import { DISPLAY_FEEDBACK_FAILURE, SET_HOLD_SIZE } from "../events/events";
 
 const COMMAND_HOLD = "COMMAND_HOLD";
 
 function onHoldCommand(state, eventBus, event) {
-  eventBus.send(PLAYER_SET_HOLD_SIZE, { value: event.holdSize });
+  eventBus.send(SET_HOLD_SIZE, { value: event.holdSize });
 }
 
 export const commandParser = {

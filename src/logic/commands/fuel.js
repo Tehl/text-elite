@@ -1,7 +1,7 @@
 import { getFuel, getCash } from "../../state/selectors";
 import {
   DISPLAY_FEEDBACK_FAILURE,
-  PURCHASE_FUEL,
+  BUY_FUEL,
   DISPLAY_FEEDBACK_SUCCESS
 } from "../events/events";
 import rules from "../rules";
@@ -26,7 +26,7 @@ function onFuelCommand(state, eventBus, event) {
 
   const purchasePrice = purchaseAmount * rules.fuelCost;
 
-  eventBus.send(PURCHASE_FUEL, {
+  eventBus.send(BUY_FUEL, {
     fuelAmount: purchaseAmount,
     fuelPrice: purchasePrice
   });

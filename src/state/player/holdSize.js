@@ -1,6 +1,4 @@
-import { NEW_GAME } from "../../logic/events/events";
-
-const PLAYER_SET_HOLD_SIZE = "PLAYER_SET_HOLD_SIZE";
+import { NEW_GAME, SET_HOLD_SIZE } from "../../logic/events/events";
 
 const defaultValue = 0;
 
@@ -9,7 +7,7 @@ function holdSizeReducer(state = defaultValue, action) {
     case NEW_GAME:
       return action.startingHoldSize;
 
-    case PLAYER_SET_HOLD_SIZE:
+    case SET_HOLD_SIZE:
       return action.value;
 
     default:
@@ -20,8 +18,6 @@ function holdSizeReducer(state = defaultValue, action) {
 function getHoldSize(state) {
   return state;
 }
-
-export { PLAYER_SET_HOLD_SIZE };
 
 export { holdSizeReducer };
 

@@ -1,6 +1,4 @@
-import { NEW_GAME, PURCHASE_FUEL } from "../../logic/events/events";
-
-const PLAYER_GAINED_CASH = "PLAYER_GAINED_CASH";
+import { NEW_GAME, BUY_FUEL, ADD_CASH } from "../../logic/events/events";
 
 const defaultValue = 0;
 
@@ -9,10 +7,10 @@ function cashReducer(state = defaultValue, action) {
     case NEW_GAME:
       return action.startingCash;
 
-    case PURCHASE_FUEL:
+    case BUY_FUEL:
       return state - action.fuelPrice;
 
-    case PLAYER_GAINED_CASH:
+    case ADD_CASH:
       return state + action.value;
 
     default:
@@ -23,8 +21,6 @@ function cashReducer(state = defaultValue, action) {
 function getCash(state) {
   return state;
 }
-
-export { PLAYER_GAINED_CASH };
 
 export { cashReducer };
 

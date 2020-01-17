@@ -1,6 +1,4 @@
-import { NEW_GAME } from "../../logic/events/events";
-
-const JUMP_TO_GALAXY = "JUMP_TO_GALAXY";
+import { NEW_GAME, JUMP_TO_GALAXY } from "../../logic/events/events";
 
 const defaultValue = 0;
 
@@ -20,8 +18,6 @@ function currentGalaxyReducer(state = defaultValue, action) {
 function getCurrentGalaxy(state) {
   return state;
 }
-
-export { JUMP_TO_GALAXY };
 
 export { currentGalaxyReducer };
 

@@ -1,10 +1,9 @@
-import { PLAYER_GAINED_CASH } from "../../state/player/cash";
-import { DISPLAY_FEEDBACK_FAILURE } from "../events/events";
+import { DISPLAY_FEEDBACK_FAILURE, ADD_CASH } from "../events/events";
 
 const COMMAND_CASH = "COMMAND_CASH";
 
 function onCashCommand(state, eventBus, event) {
-  eventBus.send(PLAYER_GAINED_CASH, { value: event.cashValue * 10 });
+  eventBus.send(ADD_CASH, { value: event.cashValue * 10 });
 }
 
 export const commandParser = {
