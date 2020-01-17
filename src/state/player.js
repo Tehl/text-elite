@@ -6,17 +6,23 @@ import {
   holdSizeReducer,
   selectors as holdSizeSelectors
 } from "./player/holdSize";
+import {
+  inventoryReducer,
+  selectors as inventorySelectors
+} from "./player/inventory";
 
 const playerReducer = combineReducers({
   cash: cashReducer,
   fuel: fuelReducer,
-  holdSize: holdSizeReducer
+  holdSize: holdSizeReducer,
+  inventory: inventoryReducer
 });
 
 const playerSelectors = combineSelectors({
   cash: cashSelectors,
   fuel: fuelSelectors,
-  holdSize: holdSizeSelectors
+  holdSize: holdSizeSelectors,
+  inventory: inventorySelectors
 });
 
 export { playerReducer, playerSelectors };
