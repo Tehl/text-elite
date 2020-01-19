@@ -14,13 +14,13 @@ function inventoryReducer(state = defaultValue, action) {
     case BUY_FROM_MARKET:
       return {
         ...state,
-        [action.commodityId]: state[action.commodityId] + action.quantity
+        [action.commodityId]: (state[action.commodityId] || 0) + action.quantity
       };
 
     case SELL_TO_MARKET:
       return {
         ...state,
-        [action.commodityId]: state[action.commodityId] - action.quantity
+        [action.commodityId]: (state[action.commodityId] || 0) - action.quantity
       };
 
     default:
