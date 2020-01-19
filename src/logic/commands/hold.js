@@ -1,4 +1,5 @@
 import { DISPLAY_FEEDBACK_FAILURE, SET_HOLD_SIZE } from "../events/events";
+import { getHoldSpaceUsed } from "../../state/selectors";
 
 const COMMAND_HOLD = "COMMAND_HOLD";
 
@@ -9,23 +10,23 @@ function onHoldCommand(state, eventBus, event) {
 export const commandParser = {
   name: "hold",
   createCommand: args => (state, eventBus) => {
-    const holdSize = parseInt(args, 10);
-    if (isNaN(holdSize)) {
+    const newHoldSize = parseInt(args, 10);
+    if (isNaN(newHoldSize)) {
       eventBus.send(DISPLAY_FEEDBACK_FAILURE, {
         message: "Number not understood"
       });
       return false;
     }
 
-    // todo: validate available space
-    if (false) {
+    const spaceUsed = getHoldSpaceUsed(state);
+    if (spaceUsed > newHoldSize) {
       eventBus.send(DISPLAY_FEEDBACK_FAILURE, {
         message: "Hold too full"
       });
       return false;
     }
 
-    eventBus.send(COMMAND_HOLD, { holdSize });
+    eventBus.send(COMMAND_HOLD, { holdSize: newHoldSize });
     return true;
   }
 };

@@ -17,6 +17,13 @@ function commodity(
   this.availableToBuy = availableToBuy;
 }
 
+// ref: unitnames[]
+const units = {
+  tonnes: 0,
+  kilograms: 1,
+  grams: 2
+};
+
 // ref: commodities
 /* Data for DB's price/availability generation system */
 /*              Base  Grad   Base  Mask Un  Name            Available?
@@ -42,6 +49,9 @@ const commodities = [
   new commodity(0x35, +0x0f, 0xc0, 0x07, 0, "Alien Items ", false)
 ];
 
-commodities.forEach((x, idx) => (x.commodityId = idx));
+commodities.forEach((x, idx) => {
+  x.commodityId = idx;
+  x.volume = x.units === units.tonnes ? 1 : 0;
+});
 
-export { commodities };
+export { commodities, units };

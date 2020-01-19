@@ -10,6 +10,8 @@ import {
   inventoryReducer,
   selectors as inventorySelectors
 } from "./player/inventory";
+import createHoldSpaceUsedSelector from "./player/derived/holdSpaceUsed";
+import createHoldSpaceAvailableSelector from "./player/derived/holdSpaceAvailable";
 
 const playerReducer = combineReducers({
   cash: cashReducer,
@@ -24,5 +26,10 @@ const playerSelectors = combineSelectors({
   holdSize: holdSizeSelectors,
   inventory: inventorySelectors
 });
+
+playerSelectors.getHoldSpaceUsed = createHoldSpaceUsedSelector(playerSelectors);
+playerSelectors.getHoldSpaceAvailable = createHoldSpaceAvailableSelector(
+  playerSelectors
+);
 
 export { playerReducer, playerSelectors };

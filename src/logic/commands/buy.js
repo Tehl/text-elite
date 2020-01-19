@@ -1,7 +1,8 @@
 import {
   getCash,
   getMarketPrice,
-  getMarketQuantity
+  getMarketQuantity,
+  getHoldSpaceAvailable
 } from "../../state/selectors";
 import {
   BUY_FROM_MARKET,
@@ -36,10 +37,19 @@ function onBuyCommand(state, eventBus, event) {
   const marketPrice = getMarketPrice(state, commodityId);
   const affordableQuantity = Math.floor(currentCash / marketPrice);
 
+  let spaceForQuantity;
+  if (commodity.volume > 0) {
+    const availableSpace = getHoldSpaceAvailable(state);
+    spaceForQuantity = Math.floor(availableSpace / commodity.volume);
+  } else {
+    spaceForQuantity = requestedQuantity;
+  }
+
   const purchaseQuantity = Math.min(
     requestedQuantity,
     availableQuantity,
-    affordableQuantity
+    affordableQuantity,
+    spaceForQuantity
   );
 
   if (purchaseQuantity <= 0) {

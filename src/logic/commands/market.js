@@ -2,7 +2,8 @@ import {
   getMarketPrice,
   getMarketQuantity,
   getInventoryQuantity,
-  getFuel
+  getFuel,
+  getHoldSpaceAvailable
 } from "../../state/selectors";
 import { commodities } from "../../data/commodities";
 import { unitNames } from "../../data/strings";
@@ -23,9 +24,11 @@ function onMarketCommand(state, eventBus, event) {
   const fuel = getFuel(state);
   const displayFuel = (fuel / 10).toFixed(1);
 
+  const holdSpace = getHoldSpaceAvailable(state);
+
   const marketInfo = [
     ...commodityData,
-    `Fuel :${displayFuel}      Holdspace :${0}t`
+    `Fuel :${displayFuel}      Holdspace :${holdSpace}t`
   ];
 
   eventBus.send(DISPLAY_FEEDBACK_INFO, {
