@@ -1,6 +1,7 @@
 import { registerEvents as buyCommand } from "./buy";
 import { registerEvents as cashCommand } from "./cash";
 import { registerEvents as fuelCommand } from "./fuel";
+import { registerEvents as hyperjumpCommand } from "./hyperjump";
 import { registerEvents as helpCommand } from "./help";
 import { registerEvents as holdCommand } from "./hold";
 import { registerEvents as infoCommand } from "./info";
@@ -14,6 +15,7 @@ function registerEvents(eventBus, serviceProvider) {
   buyCommand(eventBus, serviceProvider);
   cashCommand(eventBus, serviceProvider);
   fuelCommand(eventBus, serviceProvider);
+  hyperjumpCommand(eventBus, serviceProvider);
   helpCommand(eventBus, serviceProvider);
   holdCommand(eventBus, serviceProvider);
   infoCommand(eventBus, serviceProvider);
