@@ -9,7 +9,7 @@ const eventBus = createEventBus();
 const store = createStore(eventBus);
 const parser = createParser();
 
-registerEvents(store, eventBus);
+registerEvents(store, eventBus, true);
 
 beginNewGame(eventBus);
 

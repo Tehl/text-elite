@@ -13,7 +13,6 @@ import { commandParser as localCommand } from "../logic/commands/local";
 import { commandParser as hyperjumpCommand } from "../logic/commands/hyperjump";
 import { commandParser as quitCommand } from "../logic/commands/quit";
 import { commandParser as randCommand } from "../logic/commands/rand";
-import notImplemented from "../logic/commands/notImplemented";
 
 const commandDefinitions = [
   buyCommand,

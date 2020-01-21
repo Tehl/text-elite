@@ -2,14 +2,14 @@ import { registerEvents as commandEvents } from "../logic/commands/eventRegistra
 import { registerEvents as logicEvents } from "../logic/events/eventRegistration";
 import { registerEvents as appEvents } from "./events/eventRegistration";
 
-function registerEvents(store, eventBus) {
+function registerEvents(store, eventBus, withUi) {
   function serviceProvider(eventHandler) {
     return event => eventHandler(store.getState(), eventBus, event);
   }
 
   commandEvents(eventBus, serviceProvider);
   logicEvents(eventBus, serviceProvider);
-  appEvents(eventBus, serviceProvider);
+  appEvents(eventBus, serviceProvider, withUi);
 }
 
 export default registerEvents;

@@ -1,7 +1,9 @@
 import { registerEvents as displayEvents } from "./display";
 
-function registerEvents(eventBus, serviceProvider) {
-  displayEvents(eventBus, serviceProvider);
+function registerEvents(eventBus, serviceProvider, withUi) {
+  if (withUi) {
+    displayEvents(eventBus, serviceProvider);
+  }
 }
 
 export { registerEvents };
