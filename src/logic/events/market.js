@@ -1,4 +1,9 @@
-import { NEW_GAME, MARKET_UPDATED, JUMP_TO_SYSTEM } from "./events";
+import {
+  NEW_GAME,
+  MARKET_UPDATED,
+  JUMP_TO_SYSTEM,
+  JUMP_TO_GALAXY
+} from "./events";
 import {
   getCurrentSystem,
   getGalaxyInfo,
@@ -40,6 +45,10 @@ function registerEvents(eventBus, serviceProvider) {
   eventBus.take(NEW_GAME, serviceProvider(onGenerateMarketForNewGame));
   eventBus.take(
     JUMP_TO_SYSTEM,
+    serviceProvider(onGenerateMarketForSystemChange)
+  );
+  eventBus.take(
+    JUMP_TO_GALAXY,
     serviceProvider(onGenerateMarketForSystemChange)
   );
 }
