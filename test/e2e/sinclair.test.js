@@ -14,7 +14,9 @@ describe("e2e: trading scripts", function() {
     before(function() {
       const commandData = fs.readFileSync("ref/scripts/sinclair.txt", "utf8");
       commands = commandData
-        .split(/\r?\n/g)
+        .replace("\r", "")
+        .split("\n")
+        .map(x => x.trim())
         .filter(x => x.length && !x.startsWith("q"));
     });
 
