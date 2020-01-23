@@ -1,4 +1,4 @@
-import { warning } from "../utility/devTools";
+import { warning } from "/utility/devTools";
 
 // searches a selector hierarchy and pulls all functions up to single root object.
 // this allows us to provide a flat collection of all state selectors without the rest

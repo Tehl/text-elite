@@ -1,10 +1,10 @@
-import { getFuel, getCash } from "../../state/selectors";
+import { getFuel, getCash } from "/state/selectors";
 import {
   DISPLAY_FEEDBACK_FAILURE,
   BUY_FUEL,
   DISPLAY_FEEDBACK_SUCCESS
-} from "../events/events";
-import rules from "../rules";
+} from "/logic/events/events";
+import rules from "/logic/rules";
 
 const COMMAND_FUEL = "COMMAND_FUEL";
 

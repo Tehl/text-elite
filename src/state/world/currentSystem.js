@@ -1,4 +1,4 @@
-import { NEW_GAME, JUMP_TO_SYSTEM } from "../../logic/events/events";
+import { NEW_GAME, JUMP_TO_SYSTEM } from "/logic/events/events";
 
 const defaultValue = 0;
 

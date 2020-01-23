@@ -1,6 +1,6 @@
-import { getCurrentGalaxy } from "../../state/selectors";
-import { JUMP_TO_GALAXY } from "../events/events";
-import rules from "../rules";
+import { getCurrentGalaxy } from "/state/selectors";
+import { JUMP_TO_GALAXY } from "/logic/events/events";
+import rules from "/logic/rules";
 
 const COMMAND_HYPER_JUMP = "COMMAND_HYPER_JUMP";
 

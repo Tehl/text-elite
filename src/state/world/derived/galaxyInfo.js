@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import buildGalaxy from "../../../logic/worldGen/buildGalaxy";
+import buildGalaxy from "/logic/worldGen/buildGalaxy";
 
 // creates a selector which uses the currentGalaxy
 // to derive the galaxy model.

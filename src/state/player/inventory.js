@@ -2,7 +2,7 @@ import {
   NEW_GAME,
   BUY_FROM_MARKET,
   SELL_TO_MARKET
-} from "../../logic/events/events";
+} from "/logic/events/events";
 
 const defaultValue = {};
 

@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from "redux";
 import { createReduxMiddleware } from "suber";
-import { globalReducer } from "../state/global";
+import { globalReducer } from "/state/global";
 
 export default eventBus => {
   // echo all store events into the event bus, with the action type as the channel

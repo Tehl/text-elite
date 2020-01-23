@@ -1,4 +1,4 @@
-import { systemNamePairs } from "../../data/names";
+import { systemNamePairs } from "/data/names";
 
 // ref: makesystem()
 // construct a system name using the intermediate

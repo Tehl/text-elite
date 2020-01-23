@@ -1,12 +1,12 @@
-import { getMarketPrice, getInventoryQuantity } from "../../state/selectors";
+import { getMarketPrice, getInventoryQuantity } from "/state/selectors";
 import {
   SELL_TO_MARKET,
   DISPLAY_FEEDBACK_FAILURE,
   DISPLAY_FEEDBACK_SUCCESS
-} from "../events/events";
-import { stringSplit, stringBeginsWith } from "../../utility/strings";
-import { commodities } from "../../data/commodities";
-import { unitNames } from "../../data/strings";
+} from "/logic/events/events";
+import { stringSplit, stringBeginsWith } from "/utility/strings";
+import { commodities } from "/data/commodities";
+import { unitNames } from "/data/strings";
 
 const COMMAND_SELL = "COMMAND_SELL";
 

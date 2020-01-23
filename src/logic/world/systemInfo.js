@@ -1,5 +1,5 @@
-import { governmentTypes, economyTypes } from "../../data/strings";
-import getSystemDescription from "../worldGen/goatSoup";
+import { governmentTypes, economyTypes } from "/data/strings";
+import getSystemDescription from "/logic/worldGen/goatSoup";
 
 function getFullSystemInfo(system) {
   return [

@@ -1,5 +1,5 @@
-import { DISPLAY_FEEDBACK_FAILURE, SET_HOLD_SIZE } from "../events/events";
-import { getHoldSpaceUsed } from "../../state/selectors";
+import { DISPLAY_FEEDBACK_FAILURE, SET_HOLD_SIZE } from "/logic/events/events";
+import { getHoldSpaceUsed } from "/state/selectors";
 
 const COMMAND_HOLD = "COMMAND_HOLD";
 

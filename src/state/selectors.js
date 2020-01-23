@@ -1,4 +1,4 @@
-import { flattenSelectors } from "../utility/state";
+import { flattenSelectors } from "/utility/state";
 import { globalSelectors } from "./global";
 
 // we import the shaped collection of state selectors and flatten it

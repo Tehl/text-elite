@@ -8,9 +8,9 @@ import {
   getCurrentSystem,
   getGalaxyInfo,
   getMarketSeed
-} from "../../state/selectors";
-import generateMarket from "../market/generateMarket";
-import { getFluctuation, seedFluctuation } from "../market/fluctuation";
+} from "/state/selectors";
+import generateMarket from "/logic/market/generateMarket";
+import { getFluctuation, seedFluctuation } from "/logic/market/fluctuation";
 
 function onGenerateMarketEvent(state, eventBus, fluctuation, seed) {
   const galaxy = getGalaxyInfo(state);

@@ -2,8 +2,8 @@ import {
   MARKET_UPDATED,
   BUY_FROM_MARKET,
   SELL_TO_MARKET
-} from "../../logic/events/events";
-import { fromEntries } from "../../utility/object";
+} from "/logic/events/events";
+import { fromEntries } from "/utility/object";
 
 const defaultValue = {};
 

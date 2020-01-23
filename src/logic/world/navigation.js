@@ -1,6 +1,6 @@
-import { roundToNearest } from "../../utility/math";
-import { int32_t } from "../../utility/c_types";
-import { stringBeginsWith } from "../../utility/strings";
+import { roundToNearest } from "/utility/math";
+import { int32_t } from "/utility/c_types";
+import { stringBeginsWith } from "/utility/strings";
 
 // ref: distance()
 // calculates the distance between two systems

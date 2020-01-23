@@ -1,4 +1,4 @@
-import { NEW_GAME, SET_HOLD_SIZE } from "../../logic/events/events";
+import { NEW_GAME, SET_HOLD_SIZE } from "/logic/events/events";
 
 const defaultValue = 0;
 

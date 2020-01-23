@@ -4,7 +4,7 @@ import {
   BUY_FROM_MARKET,
   SELL_TO_MARKET,
   ADD_CASH
-} from "../../logic/events/events";
+} from "/logic/events/events";
 
 const defaultValue = 0;
 

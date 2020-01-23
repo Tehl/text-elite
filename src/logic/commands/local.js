@@ -1,12 +1,8 @@
-import {
-  getCurrentSystem,
-  getGalaxyInfo,
-  getFuel
-} from "../../state/selectors";
-import { getShortSystemInfo } from "../world/systemInfo";
-import { distanceBetween } from "../world/navigation";
-import { DISPLAY_FEEDBACK_INFO } from "../events/events";
-import rules from "../rules";
+import { getCurrentSystem, getGalaxyInfo, getFuel } from "/state/selectors";
+import { getShortSystemInfo } from "/logic/world/systemInfo";
+import { distanceBetween } from "/logic/world/navigation";
+import { DISPLAY_FEEDBACK_INFO } from "/logic/events/events";
+import rules from "/logic/rules";
 
 const COMMAND_LOCAL = "COMMAND_LOCAL";
 

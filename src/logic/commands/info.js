@@ -1,7 +1,7 @@
-import { getCurrentSystem, getGalaxyInfo } from "../../state/selectors";
-import { findNearestByName } from "../world/navigation";
-import { getFullSystemInfo } from "../world/systemInfo";
-import { DISPLAY_FEEDBACK_INFO } from "../events/events";
+import { getCurrentSystem, getGalaxyInfo } from "/state/selectors";
+import { findNearestByName } from "/logic/world/navigation";
+import { getFullSystemInfo } from "/logic/world/systemInfo";
+import { DISPLAY_FEEDBACK_INFO } from "/logic/events/events";
 
 const COMMAND_INFO = "COMMAND_INFO";
 

@@ -1,7 +1,5 @@
 import { expect } from "chai";
-import getSystemDescription, {
-  _internals
-} from "../../../src/logic/worldGen/goatSoup";
+import getSystemDescription, { _internals } from "/logic/worldGen/goatSoup";
 
 describe("systemSeed", function() {
   describe("_internals", function() {

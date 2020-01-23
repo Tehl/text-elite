@@ -1,10 +1,6 @@
-import {
-  getCurrentSystem,
-  getGalaxyInfo,
-  getFuel
-} from "../../state/selectors";
-import { findNearestByName, distanceBetween } from "../world/navigation";
-import { DISPLAY_FEEDBACK_FAILURE, JUMP_TO_SYSTEM } from "../events/events";
+import { getCurrentSystem, getGalaxyInfo, getFuel } from "/state/selectors";
+import { findNearestByName, distanceBetween } from "/logic/world/navigation";
+import { DISPLAY_FEEDBACK_FAILURE, JUMP_TO_SYSTEM } from "/logic/events/events";
 import { COMMAND_INFO } from "./info";
 
 const COMMAND_JUMP = "COMMAND_JUMP";

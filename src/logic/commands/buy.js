@@ -3,15 +3,15 @@ import {
   getMarketPrice,
   getMarketQuantity,
   getHoldSpaceAvailable
-} from "../../state/selectors";
+} from "/state/selectors";
 import {
   BUY_FROM_MARKET,
   DISPLAY_FEEDBACK_FAILURE,
   DISPLAY_FEEDBACK_SUCCESS
-} from "../events/events";
-import { stringSplit, stringBeginsWith } from "../../utility/strings";
-import { commodities } from "../../data/commodities";
-import { unitNames } from "../../data/strings";
+} from "/logic/events/events";
+import { stringSplit, stringBeginsWith } from "/utility/strings";
+import { commodities } from "/data/commodities";
+import { unitNames } from "/data/strings";
 
 const COMMAND_BUY = "COMMAND_BUY";
 

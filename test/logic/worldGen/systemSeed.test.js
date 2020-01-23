@@ -1,8 +1,6 @@
 import { expect } from "chai";
-import getSystemSeed, {
-  _internals
-} from "../../../src/logic/worldGen/systemSeed";
-import { uint16_t } from "../../../src/utility/c_types";
+import getSystemSeed, { _internals } from "/logic/worldGen/systemSeed";
+import { uint16_t } from "/utility/c_types";
 
 describe("systemSeed", function() {
   describe("_internals", function() {

@@ -1,4 +1,4 @@
-import { DISPLAY_FEEDBACK_INFO } from "../events/events";
+import { DISPLAY_FEEDBACK_INFO } from "/logic/events/events";
 
 const COMMAND_HELP = "COMMAND_HELP";
 

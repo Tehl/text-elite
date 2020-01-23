@@ -1,4 +1,4 @@
-import { MARKET_UPDATED } from "../../logic/events/events";
+import { MARKET_UPDATED } from "/logic/events/events";
 
 const defaultValue = {
   current: 0,

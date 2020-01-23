@@ -1,4 +1,4 @@
-import rules from "../rules";
+import rules from "/logic/rules";
 import getGalaxySeed from "./galaxySeed";
 import getSystemSeed from "./systemSeed";
 import buildSystem from "./buildSystem";

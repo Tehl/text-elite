@@ -1,6 +1,6 @@
-import { randomNamePairs } from "../../data/names";
-import { descriptionRoot, descriptionOptions } from "../../data/goatSoup";
-import { toProperCase } from "../../utility/strings";
+import { randomNamePairs } from "/data/names";
+import { descriptionRoot, descriptionOptions } from "/data/goatSoup";
+import { toProperCase } from "/utility/strings";
 
 // ref: gen_rnd_number()
 // generates a random number based on seed information,

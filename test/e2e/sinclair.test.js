@@ -1,11 +1,11 @@
 import { expect } from "chai";
 import fs from "fs";
-import createEventBus from "../../src/app/createEventBus";
-import createStore from "../../src/app/createStore";
-import createParser from "../../src/app/createParser";
-import registerEvents from "../../src/app/registerEvents";
-import { beginNewGame } from "../../src/logic/events/newGame";
-import { getCash } from "../../src/state/selectors";
+import createEventBus from "/app/createEventBus";
+import createStore from "/app/createStore";
+import createParser from "/app/createParser";
+import registerEvents from "/app/registerEvents";
+import { beginNewGame } from "/logic/events/newGame";
+import { getCash } from "/state/selectors";
 
 describe("e2e: trading scripts", function() {
   describe("#sinclair.txt", function() {

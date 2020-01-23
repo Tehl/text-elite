@@ -1,7 +1,7 @@
-import rules from "../rules";
+import rules from "/logic/rules";
 import { NEW_GAME } from "./events";
-import { COMMAND_HELP } from "../commands/help";
-import { DISPLAY_FEEDBACK_INFO } from "../events/events";
+import { COMMAND_HELP } from "/logic/commands/help";
+import { DISPLAY_FEEDBACK_INFO } from "/logic/events/events";
 
 function beginNewGame(eventBus) {
   eventBus.send(NEW_GAME, {

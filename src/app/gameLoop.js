@@ -1,6 +1,6 @@
 import readline from "readline";
 import printf from "printf";
-import { getCash } from "../state/selectors";
+import { getCash } from "/state/selectors";
 
 function gameLoop(store, eventBus, parser) {
   const rl = readline.createInterface(process.stdin, process.stdout);

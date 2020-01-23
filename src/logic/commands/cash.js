@@ -1,4 +1,4 @@
-import { DISPLAY_FEEDBACK_FAILURE, ADD_CASH } from "../events/events";
+import { DISPLAY_FEEDBACK_FAILURE, ADD_CASH } from "/logic/events/events";
 
 const COMMAND_CASH = "COMMAND_CASH";
 

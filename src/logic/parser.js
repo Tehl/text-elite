@@ -1,4 +1,4 @@
-import { stringSplit, stringBeginsWith } from "../utility/strings";
+import { stringSplit, stringBeginsWith } from "/utility/strings";
 
 function badCommand(input) {
   return () => console.log("Bad command (" + input + ")");

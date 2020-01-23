@@ -1,4 +1,4 @@
-import { commodities } from "../../data/commodities";
+import { commodities } from "/data/commodities";
 
 // ref: genmarket()
 // generates price data for a commodity

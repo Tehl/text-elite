@@ -4,10 +4,10 @@ import {
   getInventoryQuantity,
   getFuel,
   getHoldSpaceAvailable
-} from "../../state/selectors";
-import { commodities } from "../../data/commodities";
-import { unitNames } from "../../data/strings";
-import { DISPLAY_FEEDBACK_INFO } from "../events/events";
+} from "/state/selectors";
+import { commodities } from "/data/commodities";
+import { unitNames } from "/data/strings";
+import { DISPLAY_FEEDBACK_INFO } from "/logic/events/events";
 
 const COMMAND_MARKET = "COMMAND_MARKET";
 

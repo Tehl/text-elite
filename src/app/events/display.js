@@ -2,7 +2,7 @@ import {
   DISPLAY_FEEDBACK_SUCCESS,
   DISPLAY_FEEDBACK_FAILURE,
   DISPLAY_FEEDBACK_INFO
-} from "../../logic/events/events";
+} from "/logic/events/events";
 
 function onDisplayMessage(event) {
   let message = event.message;

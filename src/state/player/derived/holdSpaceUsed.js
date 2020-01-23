@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { commodities } from "../../../data/commodities";
+import { commodities } from "/data/commodities";
 
 // creates a selector which uses the inventory contents
 // to derive the amount of hold space which has been used.

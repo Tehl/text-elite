@@ -1,4 +1,4 @@
-import { uint16_t } from "../../utility/c_types";
+import { uint16_t } from "/utility/c_types";
 
 // ref: tweakseed()
 // rotates the components of an existing seed to produce the next
