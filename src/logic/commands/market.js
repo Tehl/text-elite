@@ -8,13 +8,14 @@ import {
 import { commodities } from "/data/commodities";
 import { unitNames } from "/data/strings";
 import { DISPLAY_FEEDBACK_INFO } from "/logic/events/events";
+import { formatPrice, formatFuel } from "/logic/display";
 
 const COMMAND_MARKET = "COMMAND_MARKET";
 
 function onMarketCommand(state, eventBus, event) {
   const commodityData = commodities.map(x => {
     const price = getMarketPrice(state, x.commodityId);
-    const displayPrice = (price / 10).toFixed(1);
+    const displayPrice = formatPrice(price);
     const available = getMarketQuantity(state, x.commodityId);
     const owned = getInventoryQuantity(state, x.commodityId);
     const unit = unitNames[x.units];
@@ -22,7 +23,7 @@ function onMarketCommand(state, eventBus, event) {
   });
 
   const fuel = getFuel(state);
-  const displayFuel = (fuel / 10).toFixed(1);
+  const displayFuel = formatFuel(fuel);
 
   const holdSpace = getHoldSpaceAvailable(state);
 

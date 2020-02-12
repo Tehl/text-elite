@@ -1,6 +1,7 @@
 import React from "react";
 import { Box } from "ink";
 import TextInput from "ink-text-input";
+import { formatCash } from "/logic/display";
 
 class Prompt extends React.Component {
   constructor() {
@@ -16,10 +17,9 @@ class Prompt extends React.Component {
 
   render() {
     const { cash } = this.props;
-    const cashValue = (cash / 10).toFixed(1);
     return (
       <Box>
-        <Box marginRight={1}>Cash: {cashValue}></Box>
+        <Box marginRight={1}>Cash: {formatCash(cash)}></Box>
 
         <TextInput
           value={this.state.value}

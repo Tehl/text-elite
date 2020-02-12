@@ -1,13 +1,14 @@
 import React from "react";
 import { Box } from "ink";
 import { unitNames } from "/data/strings";
+import { formatPrice } from "/logic/display";
 import columnSize from "../columnSize";
 
 const MarketInfoItem = ({ name, price, available, owned, units }) => (
   <Box flexDirection="row">
     <Box width={columnSize.name}>{name}</Box>
     <Box width={columnSize.price} justifyContent="flex-end">
-      {(price / 10).toFixed(1)}
+      {formatPrice(price)}
     </Box>
     <Box width={columnSize.available} justifyContent="flex-end">
       {available}

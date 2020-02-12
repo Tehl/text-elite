@@ -3,6 +3,7 @@ import { getShortSystemInfo } from "/logic/world/systemInfo";
 import { distanceBetween } from "/logic/world/navigation";
 import { DISPLAY_FEEDBACK_INFO } from "/logic/events/events";
 import rules from "/logic/rules";
+import { formatDistance } from "/logic/display";
 
 const COMMAND_LOCAL = "COMMAND_LOCAL";
 
@@ -21,8 +22,7 @@ function onLocalCommand(state, eventBus, event) {
   const localSystemInfo = localSystems.map(x => {
     const info = getShortSystemInfo(x.system);
     const inRange = x.distance <= currentFuel ? "*" : "-";
-    const distance = x.distance / 10;
-    return ` ${inRange} ${info} (${distance.toFixed(1)} LY)`;
+    return ` ${inRange} ${info} (${formatDistance(x.distance)} LY)`;
   });
 
   eventBus.send(DISPLAY_FEEDBACK_INFO, { message: localSystemInfo });

@@ -5,6 +5,7 @@ import {
   DISPLAY_FEEDBACK_SUCCESS
 } from "/logic/events/events";
 import rules from "/logic/rules";
+import { formatFuel } from "/logic/display";
 
 const COMMAND_FUEL = "COMMAND_FUEL";
 
@@ -32,7 +33,7 @@ function onFuelCommand(state, eventBus, event) {
   });
 
   eventBus.send(DISPLAY_FEEDBACK_SUCCESS, {
-    message: `Buying ${(purchaseAmount / 10).toFixed(1)}LY fuel`
+    message: `Buying ${formatFuel(purchaseAmount)}LY fuel`
   });
 }
 
