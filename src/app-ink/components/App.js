@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "ink";
 import Prompt from "./Prompt/Container";
-import MarketInfo from "./MarketInfo/Container";
+import PlayerOverview from "./PlayerOverview/Container";
 import { USER_COMMAND } from "/logic/events/events";
 
 const App = ({ eventBus }) => {
@@ -12,7 +12,7 @@ const App = ({ eventBus }) => {
       <Box flexDirection="row">
         <Box width="50%"></Box>
         <Box width="50%">
-          <MarketInfo />
+          <PlayerOverview />
         </Box>
       </Box>
       <Prompt onCommand={onCommand} />
